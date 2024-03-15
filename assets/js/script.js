@@ -38,22 +38,25 @@ class Player {
         this.height = 40;
         this.position = position
         
-        this.velocity = {
-            x: 0,
-            y: 1.0,
-        };
         this.maxHealth = 100;
         this.health = 100
+        this.stamina = 100
         this.mapindex = 0
         
         this.color = 'white';
+        this.shadowColor = 'rgba(0, 0, 0, 0.3)'; // Couleur de l'ombre
+        this.shadowRadius = 20; // Rayon de l'ombre
     }
 
     draw() {
+
         c.fillStyle = this.color;
         c.fillRect(this.position.x-this.width/2, this.position.y-this.height/2, this.width, this.height);
+
         c.strokeStyle = 'black';
         c.strokeRect(this.position.x-this.width/2, this.position.y-this.height/2, this.width, this.height);
+
+        
     }
 
     drawHealthBar() {
@@ -68,9 +71,31 @@ class Player {
         c.strokeRect(this.position.x-currentHealthWidth/4, this.position.y - 35, barWidth/2, barHeight);
     }
 
+    drawStaminaBar() {
+        const barWidth = 10; // Largeur de la barre de stamina
+        const currentStaminaHeight = (this.stamina / 100) * this.height;
+
+        c.fillStyle = 'yellow';
+        c.fillRect(this.position.x + this.width / 2 + 5, this.position.y - this.height / 2, barWidth, currentStaminaHeight);
+
+        c.strokeStyle = 'black';
+        c.strokeRect(this.position.x + this.width / 2 + 5, this.position.y - this.height / 2, barWidth, this.height);
+    }
+
+    drawShadow(){
+        c.save();
+        c.beginPath();
+        c.arc(this.position.x, this.position.y-5 + this.height / 2, this.width/2, 0, Math.PI * 2);
+        c.fillStyle = this.shadowColor;
+        c.fill();
+        c.restore();
+    }
+
     update() {
+        this.drawShadow();
         this.draw();
         this.drawHealthBar();
+        this.drawStaminaBar();
     }
 }
 
@@ -83,15 +108,32 @@ const player = new Player({
 class Mutant {
     constructor(position) {
         this.position = position;
-        this.maxHealth = 20
-        this.health = 20;
-        this.width = Math.random() * (35 - 20) + 20;
+        this.width = Math.random() * (30 - 20) + 20;
         this.height = Math.random() * (35 - 20) + 20;
         this.color = 'red';
-        this.speed = Math.random() * (1.5 - 0.75) + 0.75;
+        this.shadowColor = 'rgba(0, 0, 0, 0.3)'; // Couleur de l'ombre
+        this.shadowRadius = 14; // Rayon de l'ombre
+    
+        const size = this.width * this.height;
+
+        this.speed = Math.min(1.5, 0.75 + (1.5 - 0.75) * (1 - ((this.width/2)*(this.height*2)) / 1225));
+
+        this.maxHealth = Math.round(25 * size / 1225);
+    
+        this.damage = Math.round(15 * size / 1225); 
+
+        this.health = this.maxHealth;
     }
 
     draw() {
+        // Dessiner l'ombre
+        c.save();
+        c.beginPath();
+        c.arc(this.position.x, this.position.y-5 + this.height / 2, this.width/2, 0, Math.PI * 2);
+        c.fillStyle = this.shadowColor;
+        c.fill();
+        c.restore();
+
         c.fillStyle = this.color;
         c.fillRect(this.position.x - this.width / 2, this.position.y - this.height / 2, this.width, this.height);
 
@@ -213,40 +255,14 @@ function animate() {
     drawMutants(player.mapindex);
     player.update();
     playerMove();
-    playerAttack()
     
 }
 
 function playerMove(){
-    if (keys.d.pressed && ((player.position.x + 2+player.width/2)<canvas.width-wallsize)  ) player.position.x += 2;
-    if (keys.z.pressed && ((player.position.y - 2-player.height/2)>wallsize )) player.position.y += -2;
-    if (keys.q.pressed && ((player.position.x - 2-player.width/2)>wallsize)) player.position.x += -2;
-    if (keys.s.pressed && ((player.position.y + 2+player.height/2)<canvas.height-wallsize )) player.position.y += 2
-}
-
-function playerAttack(mouseX, mouseY) {
-    let direction = "";
-
-    // Comparer les coordonnées du clic avec celles du joueur
-    if (mouseX < player.position.x && mouseY < player.position.y) {
-        direction = "NW";
-    } else if (mouseX > player.position.x && mouseY < player.position.y) {
-        direction = "NE";
-    } else if (mouseX < player.position.x && mouseY > player.position.y) {
-        direction = "SW";
-    } else if (mouseX > player.position.x && mouseY > player.position.y) {
-        direction = "SE";
-    } else if (mouseX === player.position.x && mouseY < player.position.y) {
-        direction = "N";
-    } else if (mouseX === player.position.x && mouseY > player.position.y) {
-        direction = "S";
-    } else if (mouseX < player.position.x && mouseY === player.position.y) {
-        direction = "W";
-    } else if (mouseX > player.position.x && mouseY === player.position.y) {
-        direction = "E";
-    }
-
-    console.log("Direction du clic de souris par rapport au joueur :", direction);
+    if (keys.d.pressed && ((player.position.x + 2+player.width/2)<canvas.width-wallsize)  ) player.position.x += 1.25;
+    if (keys.z.pressed && ((player.position.y - 2-player.height/2)>wallsize )) player.position.y -= 1.25;
+    if (keys.q.pressed && ((player.position.x - 2-player.width/2)>wallsize)) player.position.x -= 1.25;
+    if (keys.s.pressed && ((player.position.y + 2+player.height/2)<canvas.height-wallsize )) player.position.y += 1.25;
 }
 
 const keys = {
@@ -263,17 +279,6 @@ const keys = {
         pressed: false,
     },
 };
-
-canvas.addEventListener('mousedown', (event) => {
-    const mouseX = event.clientX - canvas.getBoundingClientRect().left;
-    const mouseY = event.clientY - canvas.getBoundingClientRect().top;
-    
-    console.log('Position du clic de souris :', mouseX, mouseY);
-    if (mouseX != null && mouseY == null) {
-        playerAttack(mouseX, mouseY);
-    }
-    
-});
 
 animate();
 
