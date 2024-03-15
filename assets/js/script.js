@@ -34,29 +34,44 @@ const backgroundlvl1 = new Sprite({
 
 class Player {
     constructor(position) {
-        this.width = 30;
-        this.height = 40;
+        this.mapindex = 0;
         this.position = position
-        
-        this.maxHealth = 100;
-        this.health = 100
-        this.stamina = 100
-        this.mapindex = 0
+        this.classes = "shooter"
+
+        if (this.classes == "shooter"){
+            this.maxHealth = 150;
+            this.health = this.maxHealth;
+            this.stamina = 100;
+            this.velocity = 1.35
+
+            this.width = 20;
+            this.height = 40;
+        } else if (this.classes == "shooter") {
+            this.maxHealth = 250;
+            this.health = this.maxHealth;
+            this.stamina = 150;
+            this.velocity = 1.25
+
+            this.width = 30;
+            this.height = 40;
+        } else {
+            console.console.error("Classes");;
+        }
         
         this.color = 'white';
         this.shadowColor = 'rgba(0, 0, 0, 0.3)'; // Couleur de l'ombre
-        this.shadowRadius = 20; // Rayon de l'ombre
+    }
+
+    setStatsforClasses(){
+        
     }
 
     draw() {
-
         c.fillStyle = this.color;
         c.fillRect(this.position.x-this.width/2, this.position.y-this.height/2, this.width, this.height);
 
         c.strokeStyle = 'black';
         c.strokeRect(this.position.x-this.width/2, this.position.y-this.height/2, this.width, this.height);
-
-        
     }
 
     drawHealthBar() {
@@ -259,10 +274,10 @@ function animate() {
 }
 
 function playerMove(){
-    if (keys.d.pressed && ((player.position.x + 2+player.width/2)<canvas.width-wallsize)  ) player.position.x += 1.25;
-    if (keys.z.pressed && ((player.position.y - 2-player.height/2)>wallsize )) player.position.y -= 1.25;
-    if (keys.q.pressed && ((player.position.x - 2-player.width/2)>wallsize)) player.position.x -= 1.25;
-    if (keys.s.pressed && ((player.position.y + 2+player.height/2)<canvas.height-wallsize )) player.position.y += 1.25;
+    if (keys.d.pressed && ((player.position.x + 2+player.width/2)<canvas.width-wallsize)  ) player.position.x += player.velocity;
+    if (keys.z.pressed && ((player.position.y - 2-player.height/2)>wallsize )) player.position.y -= player.velocity;
+    if (keys.q.pressed && ((player.position.x - 2-player.width/2)>wallsize)) player.position.x -= player.velocity;
+    if (keys.s.pressed && ((player.position.y + 2+player.height/2)<canvas.height-wallsize )) player.position.y += player.velocity;
 }
 
 const keys = {
