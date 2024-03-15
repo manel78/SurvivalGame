@@ -1,14 +1,61 @@
 const canvas = document.querySelector('canvas');
 const c = canvas.getContext('2d');
 
-canvas.width = window.innerWidth-(window.innerWidth/4);
-canvas.height = window.innerHeight-(window.innerHeight/8);
+canvas.width = window.innerWidth - (window.innerWidth / 4);
+canvas.height = window.innerHeight - (window.innerHeight / 8);
 
 const scaledCanvas = {
     width: canvas.width / 1,
     height: canvas.height / 1,
 };
-const wallsize = canvas.height/20
+const wallsize = canvas.height / 20
+
+function drawMenu() {
+    c.fillStyle = 'rgba(0, 0, 0, 0.5)';
+    c.fillRect(0, 0, canvas.width, canvas.height);
+
+    c.fillStyle = 'white';
+    c.font = '24px Arial';
+    c.textAlign = 'center';
+    c.fillText('Choisissez une classe :', canvas.width / 2, canvas.height / 2 - 50);
+
+    c.fillStyle = 'blue';
+    c.fillRect(canvas.width / 4, canvas.height / 2, 150, 50);
+    c.fillStyle = 'white';
+    c.fillText('Classe Melee', canvas.width / 4 + 75, canvas.height / 2 + 30);
+
+    c.fillStyle = 'red';
+    c.fillRect(canvas.width / 4 * 3 - 150, canvas.height / 2, 150, 50);
+    c.fillStyle = 'white';
+    c.fillText('Classe Shooter', canvas.width / 4 * 3 - 75, canvas.height / 2 + 30);
+}
+
+canvas.addEventListener('click', function(event) {
+    if (menuVisible) {
+        const mouseX = event.clientX - canvas.getBoundingClientRect().left;
+        const mouseY = event.clientY - canvas.getBoundingClientRect().top;
+
+        if (mouseX >= canvas.width / 4 && mouseX <= canvas.width / 4 + 150 &&
+            mouseY >= canvas.height / 2 && mouseY <= canvas.height / 2 + 50) {
+            chooseClass('melee');
+        }
+
+        if (mouseX >= canvas.width / 4 * 3 - 150 && mouseX <= canvas.width / 4 * 3 &&
+            mouseY >= canvas.height / 2 && mouseY <= canvas.height / 2 + 50) {
+            chooseClass('shooter');
+        }
+    }
+});
+
+let menuVisible = true;
+let selectedClass = '';
+
+function chooseClass(className) {
+    selectedClass = className;
+    menuVisible = false;
+    player.setStats(selectedClass);
+    startGame();
+}
 
 class Sprite {
     constructor({ position }) {
@@ -16,7 +63,7 @@ class Sprite {
     }
 
     draw() {
-        c.fillStyle = 'lightblue'; 
+        c.fillStyle = 'lightblue';
         c.fillRect(this.position.x, this.position.y, canvas.width, canvas.height);
     }
 
@@ -25,65 +72,66 @@ class Sprite {
     }
 }
 
-const backgroundlvl1 = new Sprite({
-    position: {
-        x: 0,
-        y: 0,
-    }
-});
-
 class Player {
     constructor(position) {
         this.mapindex = 0;
-        this.position = position
-        this.classes = "shooter"
+        this.position = position;
+        this.classes = "";
 
-        if (this.classes == "shooter"){
-            this.maxHealth = 150;
-            this.health = this.maxHealth;
-            this.stamina = 100;
-            this.velocity = 1.35
+        this.maxHealth = 150;
+        this.health = this.maxHealth;
+        this.stamina = 100;
+        this.weapon = new Weapon;
 
-            this.width = 20;
-            this.height = 40;
-        } else if (this.classes == "shooter") {
-            this.maxHealth = 250;
-            this.health = this.maxHealth;
-            this.stamina = 150;
-            this.velocity = 1.25
+        this.velocity = 1.35;
+        this.width = 20;
+        this.height = 40;
 
-            this.width = 30;
-            this.height = 40;
-        } else {
-            console.console.error("Classes");;
-        }
-        
         this.color = 'white';
         this.shadowColor = 'rgba(0, 0, 0, 0.3)'; // Couleur de l'ombre
     }
 
-    setStatsforClasses(){
-        
+    setStats(className){
+        this.classes = className;
+        if (this.classes == "shooter") {
+            this.maxHealth = 150;
+            this.health = this.maxHealth;
+            this.stamina = 100;
+            this.weapon = new Weapon;
+
+            this.velocity = 1.35;
+            this.width = 20;
+            this.height = 40;
+        } else if (this.classes == "melee") {
+            this.maxHealth = 250;
+            this.health = this.maxHealth;
+            this.stamina = 150;
+            this.weapon = new Weapon;
+
+            this.velocity = 1.25;
+            this.width = 30;
+            this.height = 40;
+        }
     }
 
     draw() {
         c.fillStyle = this.color;
-        c.fillRect(this.position.x-this.width/2, this.position.y-this.height/2, this.width, this.height);
+        c.fillRect(this.position.x - this.width / 2, this.position.y - this.height / 2, this.width, this.height);
 
         c.strokeStyle = 'black';
-        c.strokeRect(this.position.x-this.width/2, this.position.y-this.height/2, this.width, this.height);
+        c.strokeRect(this.position.x - this.width / 2, this.position.y - this.height / 2, this.width, this.height);
     }
 
     drawHealthBar() {
-        const barWidth = 100; 
-        const barHeight = 10; 
+        const barWidth = 100;
+        const barHeight = 10;
         const currentHealthWidth = (this.health / this.maxHealth) * barWidth;
 
         c.fillStyle = 'green';
-        c.fillRect(this.position.x-currentHealthWidth/4, this.position.y - 35, currentHealthWidth/2, barHeight);
+        c.fillRect(this.position.x - currentHealthWidth / 4, this.position.y - 35, currentHealthWidth / 2, barHeight);
 
         c.strokeStyle = 'black';
-        c.strokeRect(this.position.x-currentHealthWidth/4, this.position.y - 35, barWidth/2, barHeight);
+        c.strokeRect(this.position.x - currentHealthWidth / 4, this.position.y - 35, barWidth / 2, barHeight);
     }
 
     drawStaminaBar() {
@@ -97,10 +145,10 @@ class Player {
         c.strokeRect(this.position.x + this.width / 2 + 5, this.position.y - this.height / 2, barWidth, this.height);
     }
 
-    drawShadow(){
+    drawShadow() {
         c.save();
         c.beginPath();
-        c.arc(this.position.x, this.position.y-5 + this.height / 2, this.width/2, 0, Math.PI * 2);
+        c.arc(this.position.x, this.position.y - 5 + this.height / 2, this.width / 2, 0, Math.PI * 2);
         c.fillStyle = this.shadowColor;
         c.fill();
         c.restore();
@@ -114,11 +162,9 @@ class Player {
     }
 }
 
-const player = new Player({
-    x: canvas.width/2,
-    y: canvas.height/2,
-});
+class Weapon {
 
+}
 
 class Mutant {
     constructor(position) {
@@ -128,14 +174,14 @@ class Mutant {
         this.color = 'red';
         this.shadowColor = 'rgba(0, 0, 0, 0.3)'; // Couleur de l'ombre
         this.shadowRadius = 14; // Rayon de l'ombre
-    
+
         const size = this.width * this.height;
 
-        this.speed = Math.min(1.5, 0.75 + (1.5 - 0.75) * (1 - ((this.width/2)*(this.height*2)) / 1225));
+        this.speed = Math.min(1.5, 0.75 + (1.5 - 0.75) * (1 - ((this.width / 2) * (this.height * 2)) / 1225));
 
         this.maxHealth = Math.round(25 * size / 1225);
-    
-        this.damage = Math.round(15 * size / 1225); 
+
+        this.damage = Math.round(15 * size / 1225);
 
         this.health = this.maxHealth;
     }
@@ -144,7 +190,7 @@ class Mutant {
         // Dessiner l'ombre
         c.save();
         c.beginPath();
-        c.arc(this.position.x, this.position.y-5 + this.height / 2, this.width/2, 0, Math.PI * 2);
+        c.arc(this.position.x, this.position.y - 5 + this.height / 2, this.width / 2, 0, Math.PI * 2);
         c.fillStyle = this.shadowColor;
         c.fill();
         c.restore();
@@ -157,15 +203,15 @@ class Mutant {
     }
 
     drawHealthBar() {
-        const barWidth = 100; 
-        const barHeight = 5; 
+        const barWidth = 100;
+        const barHeight = 5;
         const currentHealthWidth = (this.health / this.maxHealth) * barWidth;
 
         c.fillStyle = 'red';
-        c.fillRect(this.position.x-currentHealthWidth/6, this.position.y - this.height, currentHealthWidth/3, barHeight);
+        c.fillRect(this.position.x - currentHealthWidth / 6, this.position.y - this.height, currentHealthWidth / 3, barHeight);
 
         c.strokeStyle = 'black';
-        c.strokeRect(this.position.x-currentHealthWidth/6, this.position.y - this.height, barWidth/3, barHeight);
+        c.strokeRect(this.position.x - currentHealthWidth / 6, this.position.y - this.height, barWidth / 3, barHeight);
     }
 
     update() {
@@ -188,10 +234,10 @@ class Mutant {
 }
 
 const mutants = [
-    [new Mutant({x: 100, y: 100}),
-    new Mutant({x: 200, y: 300})],
-    [new Mutant({x: 100, y: 100}),
-    new Mutant({x: 200, y: 300})]
+    [new Mutant({ x: 100, y: 100 }),
+    new Mutant({ x: 200, y: 300 })],
+    [new Mutant({ x: 100, y: 100 }),
+    new Mutant({ x: 200, y: 300 })]
 ]
 
 function drawMutants(mapIndex) {
@@ -204,8 +250,6 @@ function drawMutants(mapIndex) {
         console.error("Index de carte invalide pour les mutants.");
     }
 }
-
-
 
 class Wall {
     constructor(position, width, height, color) {
@@ -222,14 +266,14 @@ class Wall {
 }
 
 const walls = [
-    [new Wall({x: 0, y: 0}, canvas.width, canvas.height/20, 'black'), 
-    new Wall({x: 0, y: 0}, canvas.height/20, canvas.height, 'black'), 
-    new Wall({x: canvas.width-canvas.height/20, y: 0}, canvas.height/20, canvas.height, 'black'),
-    new Wall({x: 0, y: canvas.height-canvas.height/20}, canvas.width, canvas.height/20, 'black')],
+    [new Wall({ x: 0, y: 0 }, canvas.width, canvas.height / 20, 'black'),
+    new Wall({ x: 0, y: 0 }, canvas.height / 20, canvas.height, 'black'),
+    new Wall({ x: canvas.width - canvas.height / 20, y: 0 }, canvas.height / 20, canvas.height, 'black'),
+    new Wall({ x: 0, y: canvas.height - canvas.height / 20 }, canvas.width, canvas.height / 20, 'black')],
 
-    [topwall2 = new Wall({x: 0, y: 0}, canvas.width, canvas.height/20, 'black'),
-    leftwall2 = new Wall({x: 0, y: 0}, canvas.height/20, canvas.height, 'black'),
-    rightwall2 = new Wall({x: canvas.width-canvas.height/20, y: 0}, canvas.height/20, canvas.height, 'black')]
+    [topwall2 = new Wall({ x: 0, y: 0 }, canvas.width, canvas.height / 20, 'black'),
+    leftwall2 = new Wall({ x: 0, y: 0 }, canvas.height / 20, canvas.height, 'black'),
+    rightwall2 = new Wall({ x: canvas.width - canvas.height / 20, y: 0 }, canvas.height / 20, canvas.height, 'black')]
 ];
 
 function drawWalls(mapIndex) {
@@ -243,41 +287,31 @@ function drawWalls(mapIndex) {
     }
 }
 
-function willCollide(x,y){
-    let willCollide = false;
-    const currentMapObstacles = obstacles[currentMapIndex+1];
-    currentMapObstacles.forEach(obstacle => {
-        if (
-            x-20 < obstacle.x + obstacle.width &&
-            x+20 > obstacle.x &&
-            y-20 < obstacle.y + obstacle.height &&
-            y+20 > obstacle.y
-        ) {
-            willCollide = true;
-        }
-    });
-    return willCollide;
-}
+const backgroundlvl1 = new Sprite({
+    position: {
+        x: 0,
+        y: 0,
+    }
+});
 
-function animate() {
-    window.requestAnimationFrame(animate);
+const player = new Player({
+    x: canvas.width/2,
+    y: canvas.height/2,
+});
 
-    c.fillStyle = 'white';
-    c.fillRect(0, 0, canvas.width, canvas.height);
-
+function startGame() {
     backgroundlvl1.update();
     drawWalls(player.mapindex);
     drawMutants(player.mapindex);
     player.update();
     playerMove();
-    
 }
 
-function playerMove(){
-    if (keys.d.pressed && ((player.position.x + 2+player.width/2)<canvas.width-wallsize)  ) player.position.x += player.velocity;
-    if (keys.z.pressed && ((player.position.y - 2-player.height/2)>wallsize )) player.position.y -= player.velocity;
-    if (keys.q.pressed && ((player.position.x - 2-player.width/2)>wallsize)) player.position.x -= player.velocity;
-    if (keys.s.pressed && ((player.position.y + 2+player.height/2)<canvas.height-wallsize )) player.position.y += player.velocity;
+function playerMove() {
+    if (keys.d.pressed && ((player.position.x + 2 + player.width / 2) < canvas.width - wallsize)) player.position.x += player.velocity;
+    if (keys.z.pressed && ((player.position.y - 2 - player.height / 2) > wallsize)) player.position.y -= player.velocity;
+    if (keys.q.pressed && ((player.position.x - 2 - player.width / 2) > wallsize)) player.position.x -= player.velocity;
+    if (keys.s.pressed && ((player.position.y + 2 + player.height / 2) < canvas.height - wallsize)) player.position.y += player.velocity;
 }
 
 const keys = {
@@ -295,7 +329,23 @@ const keys = {
     },
 };
 
+
+
+function animate() {
+    window.requestAnimationFrame(animate);
+
+    c.clearRect(0, 0, canvas.width, canvas.height);
+
+    if (menuVisible) {
+        drawMenu();
+    } else {
+        startGame();
+    }
+}
+
 animate();
+
+
 
 window.addEventListener('keydown', (event) => {
     switch (event.key) {
