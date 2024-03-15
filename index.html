@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Survival Game </title>
+    <meta http-equiv="X-AV-compatible" content="ID=edge"/>
+    <meta name="viewport" content="width=device, initial-scale=1.0">
+    <style>
+        h1 {
+            color: rgb(245, 242, 242);
+            text-align: center;
+        }
+        #game { /*cadre de jeu */
+            box-shadow: 10px 10px 15px black;
+            width: 800px; 
+            height: 550px; 
+            display: block; 
+            position: relative; 
+            overflow: hidden; /* empeche le carre de sortir */
+        }
+        #square { /* personnage qui se promene */
+            width: 50px;
+            height: 50px;
+            background-color: rgb(94, 98, 80);
+            position: absolute;
+        }
+        body {
+            display: flex;
+            justify-content: center;
+            align-content: center;
+            height: 100vh;
+            background: linear-gradient(
+                0deg,
+                rgb(86, 115, 79) 0%, 
+                rgb(198, 184, 122) 60% 
+            );
+        }
+    </style>
+</head>
+<body>
+    <div>
+        <h1> maps </h1>
+        <div id="game">
+            <div id="square"></div> <!-- carre se deplace seulement dans cette zone -->
+        </div>
+    </div>
+    <script>
+        const square = document.getElementById("square");
+        const game = document.getElementById("game"); // zone de jeu
+
+        let positionX = 0;
+        let positionY = 0;
+        let speed = 5;
+
+        function moveSquare() {
+            square.style.left = positionX + "px";
+            square.style.top = positionY + "px";
+        }
+
+        function handleKeyPress(event) {
+            switch (event.key) {
+                case "ArrowLeft":
+                    positionX = Math.max(0, positionX - speed); // garde le carré gauche
+                    break;
+                case "ArrowRight":
+                    positionX = Math.min(game.clientWidth - square.offsetWidth, positionX + speed); // garde le carré droite
+                    break;
+                case "ArrowUp":
+                    positionY = Math.max(0, positionY - speed); // garde le carré en haut
+                    break;
+                case "ArrowDown":
+                    positionY = Math.min(game.clientHeight - square.offsetHeight, positionY + speed); // garde le carré en bas
+                    break;
+                default:
+                    break;
+            }
+            moveSquare();
+        }
+
+        document.addEventListener("keydown", handleKeyPress);
+    </script>
+</body>
+</html>
