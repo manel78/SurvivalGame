@@ -87,21 +87,21 @@ class Player {
         const currentHealthWidth = (this.health / this.maxHealth) * barWidth;
 
         c.fillStyle = 'green';
-        c.fillRect(this.position.x - currentHealthWidth / 4, this.position.y - 35, currentHealthWidth / 2, barHeight);
+        c.fillRect(canvas.width-canvas.width/6-1, canvas.height/6+1, canvas.width/6, barHeight);
 
         c.strokeStyle = 'black';
-        c.strokeRect(this.position.x - currentHealthWidth / 4, this.position.y - 35, barWidth / 2, barHeight);
+        c.strokeRect(canvas.width-canvas.width/6-1, canvas.height/6+1, canvas.width/6, barHeight);
     }
 
     drawStaminaBar() {
-        const barWidth = 10; // Largeur de la barre de stamina
+        const barHeight = 10; // Largeur de la barre de stamina
         const currentStaminaHeight = (this.stamina / 100) * this.height;
 
         c.fillStyle = 'yellow';
-        c.fillRect(this.position.x + this.width / 2 + 5, this.position.y - this.height / 2, barWidth, currentStaminaHeight);
+        c.fillRect(canvas.width-canvas.width/6-1, canvas.height/6+11, canvas.width/6, barHeight);
 
         c.strokeStyle = 'black';
-        c.strokeRect(this.position.x + this.width / 2 + 5, this.position.y - this.height / 2, barWidth, this.height);
+        c.strokeRect(canvas.width-canvas.width/6-1, canvas.height/6+11, canvas.width/6, barHeight);
     }
 
     drawShadow() {
@@ -115,18 +115,18 @@ class Player {
 
     minimap(){
         this.pourcentpos = {
-            x: (this.position.x/canvas.width)*100,
-            y: (this.position.y/canvas.height)*100,
+            x: (this.position.x/canvas.width),
+            y: (this.position.y/canvas.height),
         }
 
         c.fillStyle = 'grey';
-        c.fillRect(canvas.width-wallsize-canvas.width/6, wallsize, canvas.width/6, canvas.height/6);
+        c.fillRect(canvas.width-canvas.width/6, 1, canvas.width/6, canvas.height/6);
 
         c.strokeStyle = 'black';
-        c.strokeRect(canvas.width-wallsize-canvas.width/6, wallsize, canvas.width/6, canvas.height/6);
+        c.strokeRect(canvas.width-canvas.width/6-1, 1, canvas.width/6, canvas.height/6);
 
         c.fillStyle = 'red';
-        c.fillRect(canvas.width-wallsize-canvas.width/6 + this.pourcentpos.x, wallsize+ this.pourcentpos.y, this.width/6, this.height/6);
+        c.fillRect(canvas.width-canvas.width/6 + this.pourcentpos.x*canvas.width/6,  this.pourcentpos.y*canvas.height/6, this.width/6, this.height/6);
     }
 
     update() {
