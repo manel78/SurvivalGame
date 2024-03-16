@@ -10,52 +10,7 @@ const scaledCanvas = {
 };
 const wallsize = canvas.height / 20
 
-function drawMenu() {
-    c.fillStyle = 'rgba(0, 0, 0, 0.5)';
-    c.fillRect(0, 0, canvas.width, canvas.height);
 
-    c.fillStyle = 'white';
-    c.font = '24px Arial';
-    c.textAlign = 'center';
-    c.fillText('Choisissez une classe :', canvas.width / 2, canvas.height / 2 - 50);
-
-    c.fillStyle = 'blue';
-    c.fillRect(canvas.width / 4, canvas.height / 2, 150, 50);
-    c.fillStyle = 'white';
-    c.fillText('Classe Melee', canvas.width / 4 + 75, canvas.height / 2 + 30);
-
-    c.fillStyle = 'red';
-    c.fillRect(canvas.width / 4 * 3 - 150, canvas.height / 2, 150, 50);
-    c.fillStyle = 'white';
-    c.fillText('Classe Shooter', canvas.width / 4 * 3 - 75, canvas.height / 2 + 30);
-}
-
-canvas.addEventListener('click', function(event) {
-    if (menuVisible) {
-        const mouseX = event.clientX - canvas.getBoundingClientRect().left;
-        const mouseY = event.clientY - canvas.getBoundingClientRect().top;
-
-        if (mouseX >= canvas.width / 4 && mouseX <= canvas.width / 4 + 150 &&
-            mouseY >= canvas.height / 2 && mouseY <= canvas.height / 2 + 50) {
-            chooseClass('melee');
-        }
-
-        if (mouseX >= canvas.width / 4 * 3 - 150 && mouseX <= canvas.width / 4 * 3 &&
-            mouseY >= canvas.height / 2 && mouseY <= canvas.height / 2 + 50) {
-            chooseClass('shooter');
-        }
-    }
-});
-
-let menuVisible = true;
-let selectedClass = '';
-
-function chooseClass(className) {
-    selectedClass = className;
-    menuVisible = false;
-    player.setStats(selectedClass);
-    startGame();
-}
 
 class Sprite {
     constructor({ position }) {
@@ -76,6 +31,10 @@ class Player {
     constructor(position) {
         this.mapindex = 0;
         this.position = position;
+        this.pourcentpos = {
+            x: (this.position.x/canvas.width)*100,
+            y: (this.position.y/canvas.height)*100,
+        }
         this.classes = "";
 
         this.maxHealth = 150;
@@ -154,7 +113,24 @@ class Player {
         c.restore();
     }
 
+    minimap(){
+        this.pourcentpos = {
+            x: (this.position.x/canvas.width)*100,
+            y: (this.position.y/canvas.height)*100,
+        }
+
+        c.fillStyle = 'grey';
+        c.fillRect(canvas.width-wallsize-canvas.width/6, wallsize, canvas.width/6, canvas.height/6);
+
+        c.strokeStyle = 'black';
+        c.strokeRect(canvas.width-wallsize-canvas.width/6, wallsize, canvas.width/6, canvas.height/6);
+
+        c.fillStyle = 'red';
+        c.fillRect(canvas.width-wallsize-canvas.width/6 + this.pourcentpos.x, wallsize+ this.pourcentpos.y, this.width/6, this.height/6);
+    }
+
     update() {
+        this.minimap();
         this.drawShadow();
         this.draw();
         this.drawHealthBar();
@@ -251,30 +227,7 @@ function drawMutants(mapIndex) {
     }
 }
 
-class Wall {
-    constructor(position, width, height, color) {
-        this.position = position;
-        this.width = width;
-        this.height = height;
-        this.color = color;
-    }
 
-    draw() {
-        c.fillStyle = this.color;
-        c.fillRect(this.position.x, this.position.y, this.width, this.height);
-    }
-}
-
-const walls = [
-    [new Wall({ x: 0, y: 0 }, canvas.width, canvas.height / 20, 'black'),
-    new Wall({ x: 0, y: 0 }, canvas.height / 20, canvas.height, 'black'),
-    new Wall({ x: canvas.width - canvas.height / 20, y: 0 }, canvas.height / 20, canvas.height, 'black'),
-    new Wall({ x: 0, y: canvas.height - canvas.height / 20 }, canvas.width, canvas.height / 20, 'black')],
-
-    [topwall2 = new Wall({ x: 0, y: 0 }, canvas.width, canvas.height / 20, 'black'),
-    leftwall2 = new Wall({ x: 0, y: 0 }, canvas.height / 20, canvas.height, 'black'),
-    rightwall2 = new Wall({ x: canvas.width - canvas.height / 20, y: 0 }, canvas.height / 20, canvas.height, 'black')]
-];
 
 function drawWalls(mapIndex) {
     if (mapIndex >= 0 && mapIndex < walls.length) {
@@ -299,19 +252,21 @@ const player = new Player({
     y: canvas.height/2,
 });
 
+let menuVisible = true;
+let selectedClass = '';
+
 function startGame() {
     backgroundlvl1.update();
-    drawWalls(player.mapindex);
     drawMutants(player.mapindex);
     player.update();
     playerMove();
 }
 
 function playerMove() {
-    if (keys.d.pressed && ((player.position.x + 2 + player.width / 2) < canvas.width - wallsize)) player.position.x += player.velocity;
-    if (keys.z.pressed && ((player.position.y - 2 - player.height / 2) > wallsize)) player.position.y -= player.velocity;
-    if (keys.q.pressed && ((player.position.x - 2 - player.width / 2) > wallsize)) player.position.x -= player.velocity;
-    if (keys.s.pressed && ((player.position.y + 2 + player.height / 2) < canvas.height - wallsize)) player.position.y += player.velocity;
+    if (keys.d.pressed && ((player.position.x + 2 + player.width / 2) < canvas.width)) player.position.x += player.velocity;
+    if (keys.z.pressed && ((player.position.y - 2 - player.height / 2) > 0)) player.position.y -= player.velocity;
+    if (keys.q.pressed && ((player.position.x - 2 - player.width / 2) > 0)) player.position.x -= player.velocity;
+    if (keys.s.pressed && ((player.position.y + 2 + player.height / 2) < canvas.height)) player.position.y += player.velocity;
 }
 
 const keys = {
@@ -329,8 +284,6 @@ const keys = {
     },
 };
 
-
-
 function animate() {
     window.requestAnimationFrame(animate);
 
@@ -345,7 +298,49 @@ function animate() {
 
 animate();
 
+function drawMenu() {
+    c.fillStyle = 'rgba(0, 0, 0, 0.5)';
+    c.fillRect(0, 0, canvas.width, canvas.height);
 
+    c.fillStyle = 'white';
+    c.font = '24px Arial';
+    c.textAlign = 'center';
+    c.fillText('Choisissez une classe :', canvas.width / 2, canvas.height / 2 - 50);
+
+    c.fillStyle = 'blue';
+    c.fillRect(canvas.width / 4-5, canvas.height / 2, 160, 50);
+    c.fillStyle = 'white';
+    c.fillText('Classe Melee', canvas.width / 4 + 75, canvas.height / 2 + 30);
+
+    c.fillStyle = 'red';
+    c.fillRect(canvas.width / 4 * 3 - 165, canvas.height / 2, 180, 50);
+    c.fillStyle = 'white';
+    c.fillText('Classe Shooter', canvas.width / 4 * 3 - 75, canvas.height / 2 + 30);
+}
+
+function chooseClass(className) {
+    selectedClass = className;
+    menuVisible = false;
+    player.setStats(selectedClass);
+    startGame();
+}
+
+canvas.addEventListener('click', function(event) {
+    if (menuVisible) {
+        const mouseX = event.clientX - canvas.getBoundingClientRect().left;
+        const mouseY = event.clientY - canvas.getBoundingClientRect().top;
+
+        if (mouseX >= canvas.width / 4 && mouseX <= canvas.width / 4 + 150 &&
+            mouseY >= canvas.height / 2 && mouseY <= canvas.height / 2 + 50) {
+            chooseClass('melee');
+        }
+
+        if (mouseX >= canvas.width / 4 * 3 - 150 && mouseX <= canvas.width / 4 * 3 &&
+            mouseY >= canvas.height / 2 && mouseY <= canvas.height / 2 + 50) {
+            chooseClass('shooter');
+        }
+    }
+});
 
 window.addEventListener('keydown', (event) => {
     switch (event.key) {
