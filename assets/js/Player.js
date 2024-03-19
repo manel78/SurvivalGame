@@ -58,8 +58,13 @@ class Player {
         const barWidth = canvas.width/6;
         const barHeight = 10;
         const currentHealthWidth = (this.health / this.maxHealth) * barWidth;
-
+        const lifePourcent = (this.health / this.maxHealth)*100
         c.fillStyle = 'green';
+        if (lifePourcent <= 33){
+        c.fillStyle = 'red';
+        } else if (lifePourcent <= 66 && lifePourcent > 33){
+            c.fillStyle = 'orange';
+        }
         c.fillRect(canvas.width-canvas.width/6-1, canvas.height/6+1, currentHealthWidth, barHeight);
 
         c.strokeStyle = 'black';

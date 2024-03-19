@@ -52,23 +52,17 @@ class Mutant {
     
 
     moveTowardsPlayer() {
-        // Position du pied du joueur
         const playerFootPositionY = player.position.y + player.height / 2;
     
-        // Calculer la direction vers le pied du joueur
         const dx = player.position.x - this.position.x;
         const dy = playerFootPositionY - this.position.y - this.height/2;
     
-        // Calculer la distance totale vers le pied du joueur
         const distanceToPlayer = Math.sqrt(dx * dx + dy * dy);
     
-        // Vérifier si le mutant est déjà au pied du joueur
         if (distanceToPlayer > 0) {
-            // Calculer les composantes de vélocité en fonction de la distance
             const vx = (dx / distanceToPlayer) * this.speed;
             const vy = (dy / distanceToPlayer) * this.speed;
     
-            // Déplacer le mutant vers le pied du joueur
             this.position.x += vx;
             this.position.y += vy;
         }
