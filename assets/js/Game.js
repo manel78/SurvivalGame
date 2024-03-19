@@ -19,9 +19,10 @@ const player = new Player({
 let menuVisible = true;
 let selectedClass = '';
 
-function startGame() {
+function Game() {
     backgroundlvl1.update();
     drawMutants(player.mapindex);
+    drawNpc(player.mapindex);
     player.update();
     playerMove();
 }
@@ -49,7 +50,7 @@ function animate() {
     if (menuVisible) {
         drawMenu();
     } else {
-        startGame();
+        Game();
     }
 }
 
@@ -79,7 +80,7 @@ function chooseClass(className) {
     selectedClass = className;
     menuVisible = false;
     player.setStats(selectedClass);
-    startGame();
+    Game();
 }
 
 canvas.addEventListener('click', function(event) {
