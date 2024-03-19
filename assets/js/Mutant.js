@@ -81,10 +81,7 @@ class Mutant {
 
             // Si le joueur est à moins de la moitié de la taille du mutant en distance
             if (distanceToPlayer < this.width / 2) {
-                // Réduire la santé du joueur
-                player.health -= this.damage;
-
-                // Mettre à jour le temps de la dernière attaque
+                player.takeDamage(this.damage)
                 this.lastAttackTime = currentTime;
             }
         }
@@ -97,3 +94,21 @@ class Mutant {
         this.attackPlayer();
     }
 }
+
+function drawMutants(mapIndex) {
+    if (mapIndex >= 0 && mapIndex < mutants.length) {
+        const mutantSet = mutants[mapIndex];
+        mutantSet.forEach(mutant => {
+            mutant.update();
+        });
+    } else {
+        console.error("Index de carte invalide pour les mutants.");
+    }
+}
+
+const mutants = [
+    [new Mutant({ x: 100, y: 100 }),
+    new Mutant({ x: 200, y: 300 })],
+    [new Mutant({ x: 100, y: 100 }),
+    new Mutant({ x: 200, y: 300 })]
+]

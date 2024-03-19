@@ -10,36 +10,10 @@ const scaledCanvas = {
 };
 const wallsize = canvas.height / 20
 
-
 const player = new Player({
     x: canvas.width/2,
     y: canvas.height/2,
 }, canvas);
-
-const mutants = [
-    [new Mutant({ x: 100, y: 100 }),
-    new Mutant({ x: 200, y: 300 })],
-    [new Mutant({ x: 100, y: 100 }),
-    new Mutant({ x: 200, y: 300 })]
-]
-
-function drawMutants(mapIndex) {
-    if (mapIndex >= 0 && mapIndex < mutants.length) {
-        const mutantSet = mutants[mapIndex];
-        mutantSet.forEach(mutant => {
-            mutant.update();
-        });
-    } else {
-        console.error("Index de carte invalide pour les mutants.");
-    }
-}
-
-const backgroundlvl1 = new Sprite({
-    position: {
-        x: 0,
-        y: 0,
-    }
-});
 
 
 let menuVisible = true;
@@ -50,13 +24,6 @@ function startGame() {
     drawMutants(player.mapindex);
     player.update();
     playerMove();
-}
-
-function playerMove() {
-    if (keys.d.pressed && ((player.position.x + 2 + player.width / 2) < canvas.width)) player.position.x += player.velocity;
-    if (keys.z.pressed && ((player.position.y - 2 - player.height / 2) > 0)) player.position.y -= player.velocity;
-    if (keys.q.pressed && ((player.position.x - 2 - player.width / 2) > 0)) player.position.x -= player.velocity;
-    if (keys.s.pressed && ((player.position.y + 2 + player.height / 2) < canvas.height)) player.position.y += player.velocity;
 }
 
 const keys = {
@@ -149,6 +116,10 @@ window.addEventListener('keydown', (event) => {
         case 's':
             keys.s.pressed = true;
             break;
+
+        case 'Shift':
+            keys.shift.pressed = true;
+            break;
     }
 });
 
@@ -168,6 +139,10 @@ window.addEventListener('keyup', (event) => {
 
         case 's':
             keys.s.pressed = false;
+            break;
+
+        case 'Shift':
+            keys.shift.pressed = false;
             break;
     }
 });

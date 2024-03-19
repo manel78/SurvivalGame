@@ -12,3 +12,10 @@ class Sprite {
         this.draw();
     }
 }
+
+const backgroundlvl1 = new Sprite({
+    position: {
+        x: 0,
+        y: 0,
+    }
+});

@@ -8,9 +8,11 @@ class Player {
         }
         this.classes = "";
 
+        this.alive = true;
         this.maxHealth = 0;
         this.health = this.maxHealth;
-        this.stamina = 0;
+        this.maxStamina = 100;
+        this.stamina = this.maxStamina;
         this.weapon = new Weapon;
 
         this.velocity = 0;
@@ -30,7 +32,7 @@ class Player {
             this.stamina = this.maxStamina;
             this.weapon = new Weapon;
 
-            this.velocity = 1.35;
+            this.velocity = 1.25;
             this.width = 20;
             this.height = 40;
         } else if (this.classes == "melee") {
@@ -40,7 +42,7 @@ class Player {
             this.stamina = this.maxStamina;
             this.weapon = new Weapon;
 
-            this.velocity = 1.25;
+            this.velocity = 1.15;
             this.width = 30;
             this.height = 40;
         }
@@ -108,6 +110,15 @@ class Player {
         c.fillRect(canvas.width-canvas.width/6 + this.pourcentpos.x*canvas.width/6,  this.pourcentpos.y*canvas.height/6, this.width/6, this.height/6);
     }
 
+    takeDamage(damage){
+        if ((this.health-damage)<0) {
+            this.alive = false;
+            this.health = 0;
+        } else {
+            this.health -= damage;
+        }
+    }
+
     update() {
         this.minimap();
         this.drawShadow();
@@ -115,5 +126,11 @@ class Player {
         this.drawStaminaBar();
         this.draw();
     }
+}
+function playerMove() {
+    if (keys.d.pressed && ((player.position.x + 2 + player.width / 2) < canvas.width)) player.position.x += player.velocity;
+    if (keys.z.pressed && ((player.position.y - 2 - player.height / 2) > 0)) player.position.y -= player.velocity;
+    if (keys.q.pressed && ((player.position.x - 2 - player.width / 2) > 0)) player.position.x -= player.velocity;
+    if (keys.s.pressed && ((player.position.y + 2 + player.height / 2) < canvas.height)) player.position.y += player.velocity;
 }
 
