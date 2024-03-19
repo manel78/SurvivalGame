@@ -49,7 +49,25 @@ class Mutant {
         c.strokeRect(this.position.x - currentHealthWidth / 6, this.position.y - this.height, barWidth / 3, barHeight);
     }
 
+    touchPlayer() {
+        // Coins du joueur
+        let playerTopLeft = { x: player.position.x - player.width / 2, y: player.position.y - player.height / 2 };
+        let playerBotRight = { x: player.position.x + player.width / 2, y: player.position.y + player.height / 2 };
     
+        // Coins de cet objet
+        let thisTopLeft = { x: this.position.x - this.width / 2, y: this.position.y - this.height / 2 };
+        let thisBotRight = { x: this.position.x + this.width / 2, y: this.position.y + this.height / 2 };
+    
+        // Vérification de collision
+        if (
+            (thisTopLeft.x <= playerBotRight.x && thisTopLeft.y <= playerBotRight.y) &&
+            (thisBotRight.x >= playerTopLeft.x && thisBotRight.y >= playerTopLeft.y)
+        ) {
+            return true;
+        }
+    
+        return false;
+    }
 
     moveTowardsPlayer() {
         const playerFootPositionY = player.position.y + player.height / 2;
@@ -71,17 +89,16 @@ class Mutant {
     attackPlayer() {
         const currentTime = Date.now();
         const timeSinceLastAttack = currentTime - this.lastAttackTime;
-
+    
         // Vérifier si le cooldown est écoulé
         if (timeSinceLastAttack >= this.attackCooldown) {
             const distanceToPlayer = Math.sqrt(
                 Math.pow(player.position.x - this.position.x, 2) +
                 Math.pow(player.position.y - this.position.y, 2)
             );
-
-            // Si le joueur est à moins de la moitié de la taille du mutant en distance
-            if (distanceToPlayer < this.width / 2) {
-                player.takeDamage(this.damage)
+    
+            if (this.touchPlayer()) {
+                player.takeDamage(this.damage);
                 this.lastAttackTime = currentTime;
             }
         }
