@@ -1,6 +1,5 @@
 class Player {
-    constructor(position, canvas) {
-        this.canvas = canvas;
+    constructor(position) {
         this.mapindex = 0;
         this.position = position;
         this.pourcentpos = {
@@ -9,14 +8,14 @@ class Player {
         }
         this.classes = "";
 
-        this.maxHealth = 150;
+        this.maxHealth = 0;
         this.health = this.maxHealth;
-        this.stamina = 100;
+        this.stamina = 0;
         this.weapon = new Weapon;
 
-        this.velocity = 1.35;
-        this.width = 20;
-        this.height = 40;
+        this.velocity = 0;
+        this.width = 0;
+        this.height = 0;
 
         this.color = 'white';
         this.shadowColor = 'rgba(0, 0, 0, 0.3)'; // Couleur de l'ombre
@@ -27,7 +26,8 @@ class Player {
         if (this.classes == "shooter") {
             this.maxHealth = 150;
             this.health = this.maxHealth;
-            this.stamina = 100;
+            this.maxStamina = 100;
+            this.stamina = this.maxStamina;
             this.weapon = new Weapon;
 
             this.velocity = 1.35;
@@ -36,7 +36,8 @@ class Player {
         } else if (this.classes == "melee") {
             this.maxHealth = 250;
             this.health = this.maxHealth;
-            this.stamina = 150;
+            this.maxStamina = 150;
+            this.stamina = this.maxStamina;
             this.weapon = new Weapon;
 
             this.velocity = 1.25;
@@ -54,23 +55,24 @@ class Player {
     }
 
     drawHealthBar() {
-        const barWidth = 100;
+        const barWidth = canvas.width/6;
         const barHeight = 10;
         const currentHealthWidth = (this.health / this.maxHealth) * barWidth;
 
         c.fillStyle = 'green';
-        c.fillRect(canvas.width-canvas.width/6-1, canvas.height/6+1, canvas.width/6, barHeight);
+        c.fillRect(canvas.width-canvas.width/6-1, canvas.height/6+1, currentHealthWidth, barHeight);
 
         c.strokeStyle = 'black';
         c.strokeRect(canvas.width-canvas.width/6-1, canvas.height/6+1, canvas.width/6, barHeight);
     }
 
     drawStaminaBar() {
-        const barHeight = 10; // Largeur de la barre de stamina
-        const currentStaminaHeight = (this.stamina / 100) * this.height;
+        const barHeight = 10;
+        const barWidth = canvas.width/6;
+        const currentStaminaWidth = (this.stamina / this.maxStamina) * barWidth;
 
         c.fillStyle = 'yellow';
-        c.fillRect(canvas.width-canvas.width/6-1, canvas.height/6+11, canvas.width/6, barHeight);
+        c.fillRect(canvas.width-canvas.width/6-1, canvas.height/6+11, currentStaminaWidth, barHeight);
 
         c.strokeStyle = 'black';
         c.strokeRect(canvas.width-canvas.width/6-1, canvas.height/6+11, canvas.width/6, barHeight);
@@ -104,9 +106,9 @@ class Player {
     update() {
         this.minimap();
         this.drawShadow();
-        this.draw();
         this.drawHealthBar();
         this.drawStaminaBar();
+        this.draw();
     }
 }
 

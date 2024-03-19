@@ -13,9 +13,12 @@ class Mutant {
 
         this.maxHealth = Math.round(25 * size / 1225);
 
-        this.damage = Math.round(15 * size / 1225);
 
         this.health = this.maxHealth;
+
+        this.damage = Math.round(15 * size / 1225);
+        this.lastAttackTime = 0; 
+        this.attackCooldown = 2000; 
     }
 
     draw() {
@@ -46,11 +49,7 @@ class Mutant {
         c.strokeRect(this.position.x - currentHealthWidth / 6, this.position.y - this.height, barWidth / 3, barHeight);
     }
 
-    update() {
-        this.draw();
-        this.drawHealthBar();
-        this.moveTowardsPlayer();
-    }
+    
 
     moveTowardsPlayer() {
         const dx = player.position.x - this.position.x;
@@ -62,5 +61,34 @@ class Mutant {
 
         this.position.x += vx;
         this.position.y += vy;
+    }
+    
+    attackPlayer() {
+        const currentTime = Date.now();
+        const timeSinceLastAttack = currentTime - this.lastAttackTime;
+
+        // Vérifier si le cooldown est écoulé
+        if (timeSinceLastAttack >= this.attackCooldown) {
+            const distanceToPlayer = Math.sqrt(
+                Math.pow(player.position.x - this.position.x, 2) +
+                Math.pow(player.position.y - this.position.y, 2)
+            );
+
+            // Si le joueur est à moins de la moitié de la taille du mutant en distance
+            if (distanceToPlayer < this.width / 2) {
+                // Réduire la santé du joueur
+                player.health -= this.damage;
+
+                // Mettre à jour le temps de la dernière attaque
+                this.lastAttackTime = currentTime;
+            }
+        }
+    }
+
+    update() {
+        this.draw();
+        this.drawHealthBar();
+        this.moveTowardsPlayer();
+        this.attackPlayer();
     }
 }
