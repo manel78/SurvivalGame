@@ -100,13 +100,13 @@ class Player {
             y: (this.position.y/canvas.height),
         }
 
-        c.fillStyle = 'grey';
+        c.fillStyle = 'lightblue';
         c.fillRect(canvas.width-canvas.width/6, 1, canvas.width/6, canvas.height/6);
 
         c.strokeStyle = 'black';
         c.strokeRect(canvas.width-canvas.width/6-1, 1, canvas.width/6, canvas.height/6);
 
-        c.fillStyle = 'red';
+        c.fillStyle = 'white';
         c.fillRect(canvas.width-canvas.width/6 + this.pourcentpos.x*canvas.width/6,  this.pourcentpos.y*canvas.height/6, this.width/6, this.height/6);
     }
 
@@ -127,10 +127,36 @@ class Player {
         this.draw();
     }
 }
-function playerMove() {
-    if (keys.d.pressed && ((player.position.x + 2 + player.width / 2) < canvas.width)) player.position.x += player.velocity;
-    if (keys.z.pressed && ((player.position.y - 2 - player.height / 2) > 0)) player.position.y -= player.velocity;
-    if (keys.q.pressed && ((player.position.x - 2 - player.width / 2) > 0)) player.position.x -= player.velocity;
-    if (keys.s.pressed && ((player.position.y + 2 + player.height / 2) < canvas.height)) player.position.y += player.velocity;
-}
 
+function playerMove() {
+    const diagonalVelocity = player.velocity / Math.sqrt(2);
+
+    if (keys.d.pressed && ((player.position.x + 2 + player.width / 2) < canvas.width)) {
+        if (keys.z.pressed || keys.s.pressed) {
+            player.position.x += diagonalVelocity;
+        } else {
+            player.position.x += player.velocity;
+        }
+    }   
+    if (keys.z.pressed && ((player.position.y - 2 - player.height / 2) > 0)) {
+        if (keys.q.pressed || keys.d.pressed) {
+            player.position.y -= diagonalVelocity;
+        } else {
+            player.position.y -= player.velocity;
+        }
+    }
+    if (keys.q.pressed && ((player.position.x - 2 - player.width / 2) > 0)) {
+        if (keys.z.pressed || keys.s.pressed) {
+            player.position.x -= diagonalVelocity;
+        } else {
+            player.position.x -= player.velocity;
+        }
+    }
+    if (keys.s.pressed && ((player.position.y + 2 + player.height / 2) < canvas.height)) {
+        if (keys.q.pressed || keys.d.pressed) {
+            player.position.y += diagonalVelocity;
+        } else {
+            player.position.y += player.velocity;
+        }
+    }
+}
