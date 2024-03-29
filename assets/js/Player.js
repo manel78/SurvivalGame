@@ -12,7 +12,7 @@ playerRightImage.src = 'assets/img/player/playerUp.png'
 
 class Player {
     constructor(position) {
-        this.mapindex = 0;
+        this.mapindex = -1;
         this.position = position;
         this.pourcentpos = {
             x: (this.position.x/canvas.width)*100,
@@ -149,6 +149,7 @@ class Player {
         this.draw();
     }
 }
+
 
 function playerMove() {
     const diagonalVelocity = player.velocity / Math.sqrt(2);

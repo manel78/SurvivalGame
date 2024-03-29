@@ -15,18 +15,7 @@ const player = new Player({
     y: canvas.height/2,
 }, canvas);
 
-
-let menuVisible = true;
 let selectedClass = '';
-
-function Game() {
-    // backgroundlvl1.update();
-    c.drawImage(map,0,0)
-    drawMutants(player.mapindex);
-    drawNpc(player.mapindex);
-    player.update();
-    playerMove();
-}
 
 const keys = {
     d: {
@@ -48,7 +37,7 @@ function animate() {
 
     c.clearRect(0, 0, canvas.width, canvas.height);
 
-    if (menuVisible) {
+    if (player.mapindex == -1){
         drawMenu();
     } else {
         Game();
@@ -79,13 +68,21 @@ function drawMenu() {
 
 function chooseClass(className) {
     selectedClass = className;
-    menuVisible = false;
+    player.mapindex = 0;
     player.setStats(selectedClass);
     Game();
 }
 
+function Game() {
+    c.drawImage(map,0,0);
+    drawMutants(player.mapindex);
+    drawNpc(player.mapindex);
+    player.update();
+    playerMove();
+}
+
 canvas.addEventListener('click', function(event) {
-    if (menuVisible) {
+    if (player.mapindex == -1) {
         const mouseX = event.clientX - canvas.getBoundingClientRect().left;
         const mouseY = event.clientY - canvas.getBoundingClientRect().top;
 
