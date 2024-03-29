@@ -1,3 +1,15 @@
+const playerDownImage = new Image()
+playerDownImage.src = 'assets/img/player/playerDown.png'
+
+const playerUpImage = new Image()
+playerUpImage.src = 'assets/img/player/playerLeft.png'
+
+const playerLeftImage = new Image()
+playerLeftImage.src = 'assets/img/player/playerRight.png'
+
+const playerRightImage = new Image()
+playerRightImage.src = 'assets/img/player/playerUp.png'
+
 class Player {
     constructor(position) {
         this.mapindex = 0;
@@ -16,10 +28,15 @@ class Player {
         this.weapon = new Weapon;
 
         this.velocity = 0;
-        this.width = 0;
-        this.height = 0;
 
         this.color = 'white';
+        this.playerDownImage = playerDownImage;
+        this.playerUpImage = playerUpImage;
+        this.playerLeftImage = playerLeftImage;
+        this.playerRightImage = playerRightImage;
+        this.playerImage = this.playerDownImage;
+        this.width = this.playerImage.width/4;
+        this.height = this.playerImage.height;
         this.shadowColor = 'rgba(0, 0, 0, 0.3)'; // Couleur de l'ombre
     }
 
@@ -49,11 +66,16 @@ class Player {
     }
 
     draw() {
-        c.fillStyle = this.color;
-        c.fillRect(this.position.x - this.width / 2, this.position.y - this.height / 2, this.width, this.height);
-
-        c.strokeStyle = 'black';
-        c.strokeRect(this.position.x - this.width / 2, this.position.y - this.height / 2, this.width, this.height);
+        c.drawImage(this.playerImage, 
+            0,
+            0,
+            this.playerImage.width/4,
+            this.playerImage.height,
+            this.position.x - this.playerImage.width/8,
+            this.position.y - this.playerImage.height / 2,
+            this.playerImage.width/4,
+            this.playerImage.height
+            )
     }
 
     drawHealthBar() {

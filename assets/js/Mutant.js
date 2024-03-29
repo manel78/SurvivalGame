@@ -9,7 +9,7 @@ class Mutant {
 
         const size = this.width * this.height;
 
-        this.speed = Math.min(1.5, 0.75 + (1.5 - 0.75) * (1 - ((this.width / 2) * (this.height * 2)) / 1225));
+        this.speed = Math.min(1.30, 0.75 + (1.30 - 0.75) * (1 - ((this.width / 2) * (this.height * 2)) / 1225));
 
         this.maxHealth = Math.round(25 * size / 1225);
 
@@ -22,7 +22,6 @@ class Mutant {
     }
 
     draw() {
-        // Dessiner l'ombre
         c.save();
         c.beginPath();
         c.arc(this.position.x, this.position.y - 5 + this.height / 2, this.width / 2, 0, Math.PI * 2);
@@ -77,7 +76,7 @@ class Mutant {
     
         const distanceToPlayer = Math.sqrt(dx * dx + dy * dy);
     
-        if (distanceToPlayer > 0) {
+        if (distanceToPlayer > 0 && distanceToPlayer<400) {
             const vx = (dx / distanceToPlayer) * this.speed;
             const vy = (dy / distanceToPlayer) * this.speed;
     

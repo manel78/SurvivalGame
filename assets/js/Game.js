@@ -1,5 +1,5 @@
-const canvas = document.querySelector('canvas');
-const c = canvas.getContext('2d');
+// const canvas = document.querySelector('canvas');
+// const c = canvas.getContext('2d');
 
 canvas.width = window.innerWidth - (window.innerWidth / 4);
 canvas.height = window.innerHeight - (window.innerHeight / 8);
@@ -20,7 +20,8 @@ let menuVisible = true;
 let selectedClass = '';
 
 function Game() {
-    backgroundlvl1.update();
+    // backgroundlvl1.update();
+    c.drawImage(map,0,0)
     drawMutants(player.mapindex);
     drawNpc(player.mapindex);
     player.update();
