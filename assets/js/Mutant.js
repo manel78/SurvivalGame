@@ -4,16 +4,14 @@ class Mutant {
         this.width = Math.random() * (30 - 20) + 20;
         this.height = Math.random() * (35 - 20) + 20;
         this.color = 'red';
-        this.shadowColor = 'rgba(0, 0, 0, 0.3)'; // Couleur de l'ombre
-        this.shadowRadius = 14; // Rayon de l'ombre
+        this.shadowColor = 'rgba(0, 0, 0, 0.3)'; 
+        this.shadowRadius = 14; 
 
         const size = this.width * this.height;
 
         this.speed = Math.min(1.30, 0.75 + (1.30 - 0.75) * (1 - ((this.width / 2) * (this.height * 2)) / 1225));
 
         this.maxHealth = Math.round(25 * size / 1225);
-
-
         this.health = this.maxHealth;
 
         this.damage = Math.round(15 * size / 1225);

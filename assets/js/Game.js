@@ -1,5 +1,5 @@
-// const canvas = document.querySelector('canvas');
-// const c = canvas.getContext('2d');
+const canvas = document.querySelector('canvas');
+const c = canvas.getContext('2d');
 
 canvas.width = window.innerWidth - (window.innerWidth / 4);
 canvas.height = window.innerHeight - (window.innerHeight / 8);
@@ -9,13 +9,22 @@ const scaledCanvas = {
     height: canvas.height / 1,
 };
 const wallsize = canvas.height / 20
+let selectedClass = '';
 
 const player = new Player({
     x: canvas.width/2,
     y: canvas.height/2,
 }, canvas);
 
-let selectedClass = '';
+
+const map1 = new Map({ x: 0, y: 0 }, map1image);
+const map2 = new Map({ x: 0, y: 0 }, map2image);
+const map3 = new Map({ x: 0, y: 0 }, map3image);
+const map4 = new Map({ x: 0, y: 0 }, map4image);
+const map5 = new Map({ x: 0, y: 0 }, map5image);
+const map6 = new Map({ x: 0, y: 0 }, map6image);
+const mapfinal = new Map({ x: 0, y: 0 }, mapfinalimage);
+
 
 const keys = {
     d: {
@@ -37,9 +46,28 @@ function animate() {
 
     c.clearRect(0, 0, canvas.width, canvas.height);
 
-    if (player.mapindex == -1){
+    if (player.mapindex == -1) {
         drawMenu();
-    } else {
+    } else if (player.mapindex == 0) {
+        map1.draw();
+        Game();
+    } else if (player.mapindex == 1) {
+        map2.draw();
+        Game();
+    } else if (player.mapindex == 2) {
+        map3.draw();
+        Game();
+    } else if (player.mapindex == 3) {
+        map4.draw();
+        Game();
+    } else if (player.mapindex == 4) {
+        map5.draw();
+        Game();
+    } else if (player.mapindex == 5) {
+        map6.draw();
+        Game();
+    } else if (player.mapindex == 6) {
+        mapfinal.draw();
         Game();
     }
 }
@@ -74,7 +102,6 @@ function chooseClass(className) {
 }
 
 function Game() {
-    c.drawImage(map,0,0);
     drawMutants(player.mapindex);
     drawNpc(player.mapindex);
     player.update();
