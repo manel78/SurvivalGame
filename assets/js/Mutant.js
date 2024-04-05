@@ -121,8 +121,17 @@ function drawMutants(mapIndex) {
 }
 
 const mutants = [
-    [new Mutant({ x: 100, y: 100 }),
-    new Mutant({ x: 200, y: 300 })],
-    [new Mutant({ x: 100, y: 100 }),
-    new Mutant({ x: 200, y: 300 })]
+    [new Mutant({ x: 100, y: 100 }),new Mutant({ x: 200, y: 300 })],
+
+    [new Mutant({ x: 100, y: 100 }),new Mutant({ x: 200, y: 300 })],
+    
+    [new Mutant({ x: 100, y: 100 }),new Mutant({ x: 200, y: 300 })],
+    
+    [new Mutant({ x: 100, y: 100 }),new Mutant({ x: 200, y: 300 })],
+    
+    [new Mutant({ x: 100, y: 100 }),new Mutant({ x: 200, y: 300 })],
+    
+    [new Mutant({ x: 100, y: 100 }),new Mutant({ x: 200, y: 300 })],
+    
+    [new Mutant({ x: 100, y: 100 }),new Mutant({ x: 200, y: 300 })]
 ]

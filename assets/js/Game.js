@@ -1,5 +1,6 @@
 const canvas = document.querySelector('canvas');
 const c = canvas.getContext('2d');
+c.fillStyle = 'rgba(0,0,0)';
 
 canvas.width = window.innerWidth - (window.innerWidth / 4);
 canvas.height = window.innerHeight - (window.innerHeight / 8);
@@ -10,6 +11,9 @@ const scaledCanvas = {
 };
 const wallsize = canvas.height / 20
 let selectedClass = '';
+let changemapkey = false;
+let lastJKeyPressTime = 0;
+
 
 const player = new Player({
     x: canvas.width/2,
@@ -27,7 +31,6 @@ const maps = [
     new Map({ x: 0, y: 0 }, mapfinalimage)
 ];
 
-
 const keys = {
     d: {
         pressed: false,
@@ -41,6 +44,9 @@ const keys = {
     z: {
         pressed: false,
     },
+    j: {
+        pressed: false,
+    },
 };
 
 function animate() {
@@ -48,16 +54,21 @@ function animate() {
 
     c.clearRect(0, 0, canvas.width, canvas.height);
 
+    if (player.health == 0){ // Verif Mort
+        player.mapindex = 7
+    } 
+    
     if (player.mapindex == -1) {
-        drawMenu();
-    } else {
+        drawClassMenu();
+    } else if (player.mapindex > -1 && player.mapindex <= 6) { // 6 Max
         const currentMap = maps[player.mapindex];
         currentMap.draw();
         Game();
+    } else if (player.mapindex == 7) {
+        drawDeathMenu();
     }
+    
 }
-
-animate();
 
 function Game() {
     drawMutants(player.mapindex);
@@ -73,6 +84,7 @@ function chooseClass(className) {
     Game();
 }
 
+animate();
 
 canvas.addEventListener('click', function(event) {
     if (player.mapindex == -1) {
@@ -88,6 +100,19 @@ canvas.addEventListener('click', function(event) {
             mouseY >= canvas.height / 2 && mouseY <= canvas.height / 2 + 50) {
             chooseClass('shooter');
         }
+    } else if (player.mapindex == 7) {
+        const mouseX = event.clientX - canvas.getBoundingClientRect().left;
+        const mouseY = event.clientY - canvas.getBoundingClientRect().top;
+        console.log(mouseX,mouseY)
+        console.log(mouseX >= canvas.width / 2 - 90 && mouseX <= canvas.width / 2 + 90 &&
+        mouseY >= canvas.height / 2 && mouseY <= canvas.height / 2 + 60)
+
+        if (mouseX >= canvas.width / 2 - 90 && mouseX <= canvas.width / 2 + 90 &&
+        mouseY >= canvas.height / 2 && mouseY <= canvas.height / 2 + 60) {
+            animate();
+    }
+
+        
     }
 });
 
@@ -109,9 +134,21 @@ window.addEventListener('keydown', (event) => {
             keys.s.pressed = true;
             break;
 
+        case 'j':
+            if (Date.now() - lastJKeyPressTime > 500) { // 500 millisecondes de cooldown
+                if (player.mapindex == 6){
+                    player.mapindex = 0
+                }else {
+                    player.mapindex += 1;
+                }
+                lastJKeyPressTime = Date.now();
+            }
+            break;
+
         case 'Shift':
             keys.shift.pressed = true;
             break;
+
     }
 });
 
@@ -132,6 +169,11 @@ window.addEventListener('keyup', (event) => {
         case 's':
             keys.s.pressed = false;
             break;
+        
+        case 'j':
+            changemapkey = false;
+            break;
+    
 
         case 'Shift':
             keys.shift.pressed = false;

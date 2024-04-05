@@ -21,7 +21,7 @@ class Player {
         this.classes = "";
 
         this.alive = true;
-        this.maxHealth = 0;
+        this.maxHealth = -1;
         this.health = this.maxHealth;
         this.maxStamina = 100;
         this.stamina = this.maxStamina;
@@ -43,7 +43,7 @@ class Player {
     setStats(className){
         this.classes = className;
         if (this.classes == "shooter") {
-            this.maxHealth = 150;
+            this.maxHealth = 2;
             this.health = this.maxHealth;
             this.maxStamina = 100;
             this.stamina = this.maxStamina;
