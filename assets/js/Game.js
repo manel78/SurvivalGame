@@ -61,20 +61,20 @@ function animate() {
     if (player.mapindex == -1) {
         drawClassMenu();
     } else if (player.mapindex > -1 && player.mapindex <= 6) { // 6 Max
-        const currentMap = maps[player.mapindex];
-        currentMap.draw();
         Game();
     } else if (player.mapindex == 7) {
         drawDeathMenu();
-    }
+    } 
     
 }
 
 function Game() {
+    const currentMap = maps[player.mapindex];
+    playerMove();
+    currentMap.draw();
     drawMutants(player.mapindex);
     drawNpc(player.mapindex);
     player.update();
-    playerMove();
 }
 
 function chooseClass(className) {
@@ -103,12 +103,10 @@ canvas.addEventListener('click', function(event) {
     } else if (player.mapindex == 7) {
         const mouseX = event.clientX - canvas.getBoundingClientRect().left;
         const mouseY = event.clientY - canvas.getBoundingClientRect().top;
-        console.log(mouseX,mouseY)
-        console.log(mouseX >= canvas.width / 2 - 90 && mouseX <= canvas.width / 2 + 90 &&
-        mouseY >= canvas.height / 2 && mouseY <= canvas.height / 2 + 60)
 
         if (mouseX >= canvas.width / 2 - 90 && mouseX <= canvas.width / 2 + 90 &&
         mouseY >= canvas.height / 2 && mouseY <= canvas.height / 2 + 60) {
+            location.reload();
             animate();
     }
 
@@ -145,10 +143,6 @@ window.addEventListener('keydown', (event) => {
             }
             break;
 
-        case 'Shift':
-            keys.shift.pressed = true;
-            break;
-
     }
 });
 
@@ -175,8 +169,5 @@ window.addEventListener('keyup', (event) => {
             break;
     
 
-        case 'Shift':
-            keys.shift.pressed = false;
-            break;
     }
 });

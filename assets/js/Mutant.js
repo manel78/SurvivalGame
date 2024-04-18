@@ -9,7 +9,7 @@ class Mutant {
 
         const size = this.width * this.height;
 
-        this.speed = Math.min(1.30, 0.75 + (1.30 - 0.75) * (1 - ((this.width / 2) * (this.height * 2)) / 1225));
+        this.speed = Math.min(1.50, 0.75 + (1.50 - 0.75) * (1 - ((this.width / 2) * (this.height * 2)) / 1225));
 
         this.maxHealth = Math.round(25 * size / 1225);
         this.health = this.maxHealth;
@@ -119,6 +119,7 @@ function drawMutants(mapIndex) {
         console.error("Index de carte invalide pour les mutants.");
     }
 }
+
 
 const mutants = [
     [new Mutant({ x: 100, y: 100 }),new Mutant({ x: 200, y: 300 })],

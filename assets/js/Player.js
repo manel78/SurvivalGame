@@ -49,7 +49,7 @@ class Player {
             this.stamina = this.maxStamina;
             this.weapon = new Weapon;
 
-            this.velocity = 1.25;
+            this.velocity = 2.00;
             this.width = 20;
             this.height = 40;
         } else if (this.classes == "melee") {
@@ -59,7 +59,7 @@ class Player {
             this.stamina = this.maxStamina;
             this.weapon = new Weapon;
 
-            this.velocity = 1.15;
+            this.velocity = 1.80;
             this.width = 30;
             this.height = 40;
         }
