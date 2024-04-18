@@ -9,11 +9,18 @@ const scaledCanvas = {
     width: canvas.width / 1,
     height: canvas.height / 1,
 };
-const wallsize = canvas.height / 20
 let selectedClass = '';
 let changemapkey = false;
 let lastJKeyPressTime = 0;
 
+function rectangleCollision({ rectangle1, rectangle2 }) {
+    return (
+        rectangle1.position.x + rectangle1.width >= rectangle2.position.x &&
+        rectangle1.position.x <= rectangle2.position.x + rectangle2.width &&
+        rectangle1.position.y <= rectangle2.position.y + rectangle2.height &&
+        rectangle1.position.y + rectangle1.height >= rectangle2.position.y
+    );
+}
 
 const player = new Player({
     x: canvas.width/2,
