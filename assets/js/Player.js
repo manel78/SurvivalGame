@@ -151,35 +151,35 @@ class Player {
 }
 
 
-function playerMove() {
+function playerMove(currentMap) {
     const diagonalVelocity = player.velocity / Math.sqrt(2);
 
     if (keys.d.pressed && ((player.position.x + 2 + player.width / 2) < canvas.width)) {
         if (keys.z.pressed || keys.s.pressed) {
-            player.position.x += diagonalVelocity;
+            currentMap.position.x -= diagonalVelocity;
         } else {
-            player.position.x += player.velocity;
+            currentMap.position.x -= player.velocity;
         }
     }   
     if (keys.z.pressed && ((player.position.y - 2 - player.height / 2) > 0)) {
         if (keys.q.pressed || keys.d.pressed) {
-            player.position.y -= diagonalVelocity;
+            currentMap.position.y += diagonalVelocity;
         } else {
-            player.position.y -= player.velocity;
+            currentMap.position.y += player.velocity;
         }
     }
     if (keys.q.pressed && ((player.position.x - 2 - player.width / 2) > 0)) {
         if (keys.z.pressed || keys.s.pressed) {
-            player.position.x -= diagonalVelocity;
+            currentMap.position.x += diagonalVelocity;
         } else {
-            player.position.x -= player.velocity;
+            currentMap.position.x += player.velocity;
         }
     }
     if (keys.s.pressed && ((player.position.y + 2 + player.height / 2) < canvas.height)) {
         if (keys.q.pressed || keys.d.pressed) {
-            player.position.y += diagonalVelocity;
+            currentMap.position.y -= diagonalVelocity;
         } else {
-            player.position.y += player.velocity;
+            currentMap.position.y -= player.velocity;
         }
     }
 }

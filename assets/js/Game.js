@@ -70,7 +70,7 @@ function animate() {
 
 function Game() {
     const currentMap = maps[player.mapindex];
-    playerMove();
+    playerMove(currentMap);
     currentMap.draw();
     drawMutants(player.mapindex);
     drawNpc(player.mapindex);

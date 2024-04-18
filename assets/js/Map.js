@@ -27,8 +27,6 @@ class Map {
     }
 
     draw(){
-        c.drawImage(this.image, 0, 0)
+        c.drawImage(this.image, this.position.x, this.position.y)
     }
-
-
 }
