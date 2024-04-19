@@ -156,4 +156,3 @@ let mutantLoin = new Ennemi("Mutant", 12, 5, 80, "loin");
 
 joueur.attaquerPres(mutantPres); 
 joueur.attaquerLoin(mutantLoin, {x: 1, y: 0.5}, 10); // ex de direction et de vitesse du projectile
-message.txt
