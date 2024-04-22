@@ -1,5 +1,6 @@
 const canvas = document.querySelector('canvas');
 const c = canvas.getContext('2d');
+
 c.fillStyle = 'rgba(0,0,0)';
 
 canvas.width = window.innerWidth - (window.innerWidth / 4);
@@ -25,17 +26,16 @@ function rectangleCollision({ rectangle1, rectangle2 }) {
 const player = new Player({
     x: canvas.width/2,
     y: canvas.height/2,
-}, canvas);
-
+  }, canvas);
 
 const maps = [
-    new Map({ x: 0, y: 0 }, map1image),
-    new Map({ x: 0, y: 0 }, map2image),
-    new Map({ x: 0, y: 0 }, map3image),
-    new Map({ x: 0, y: 0 }, map4image),
-    new Map({ x: 0, y: 0 }, map5image),
-    new Map({ x: 0, y: 0 }, map6image),
-    new Map({ x: 0, y: 0 }, mapfinalimage)
+    new Map({ x: offset.x, y: offset.y }, map1image),
+    new Map({ x: offset.x, y: offset.y }, map2image),
+    new Map({ x: offset.x, y: offset.y }, map3image),
+    new Map({ x: offset.x, y: offset.y }, map4image),
+    new Map({ x: offset.x, y: offset.y }, map5image),
+    new Map({ x: offset.x, y: offset.y }, map6image),
+    new Map({ x: offset.x, y: offset.y }, mapfinalimage)
 ];
 
 const keys = {
@@ -58,7 +58,7 @@ const keys = {
 
 function animate() {
     window.requestAnimationFrame(animate);
-
+    
     c.clearRect(0, 0, canvas.width, canvas.height);
 
     if (player.health == 0){ // Verif Mort
@@ -79,8 +79,14 @@ function Game() {
     const currentMap = maps[player.mapindex];
     playerMove(currentMap);
     currentMap.draw();
-    drawMutants(player.mapindex);
-    drawNpc(player.mapindex);
+
+    boundaries = getcollision()
+    boundaries.forEach(boundary =>{
+        boundary.draw()
+    })
+    
+    // drawMutants(player.mapindex);
+    // drawNpc(player.mapindex);
     player.update();
 }
 
