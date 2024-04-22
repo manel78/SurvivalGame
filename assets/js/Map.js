@@ -23,11 +23,11 @@ mapfinalimage.src = 'assets/img/map/IslandFinal.png'
 
 function rectangleCollision({ rectangle1, rectangle2 }) {
   return (
-      rectangle1.position.x + rectangle1.width >= rectangle2.position.x &&
-      rectangle1.position.x <= rectangle2.position.x + rectangle2.width &&
-      rectangle1.position.y <= rectangle2.position.y + rectangle2.height &&
-      rectangle1.position.y + rectangle1.height >= rectangle2.position.y
-  );
+    rectangle1.position.x + rectangle1.width >= rectangle2.position.x &&
+    rectangle1.position.x <= rectangle2.position.x + rectangle2.width &&
+    rectangle1.position.y <= rectangle2.position.y + rectangle2.height &&
+    rectangle1.position.y + rectangle1.height >= rectangle2.position.y
+  )
 }
 
 const offset = {
@@ -62,52 +62,205 @@ class Boundary {
     }
 }
 
-function playerMove(map) {
 
+
+
+
+function playerMove(map) {
     const diagonalVelocity = player.velocity / Math.sqrt(2);
     const movables = [map, ...map.boundaries]
+    let moving = true
+
     if (keys.d.pressed && ((player.position.x + 2 + player.width / 2) < canvas.width)) {
         if (keys.z.pressed || keys.s.pressed) {
-          movables.forEach((movable)=>{
-            movable.position.x -= diagonalVelocity;
-          })
+          for (let i = 0; i < map.boundaries.length; i++) {
+            const boundary = map.boundaries[i]
+            if (
+              rectangleCollision({
+                rectangle1: player,
+                rectangle2: {...boundary,
+                  position: {
+                    x: boundary.position.x - player.velocity,
+                    y: boundary.position.y 
+                  }}
+              })
+            ) {
+              moving = false
+              break
+            }
+          }
+          
+          if (moving) {
+            movables.forEach((movable)=>{
+              movable.position.x -= diagonalVelocity;
+            })}
+
         } else {
-          movables.forEach((movable)=>{
-            movable.position.x -= player.velocity;
-          })
+          for (let i = 0; i < map.boundaries.length; i++) {
+            const boundary = map.boundaries[i]
+            if (
+              rectangleCollision({
+                rectangle1: player,
+                rectangle2: {...boundary,
+                  position: {
+                    x: boundary.position.x - player.velocity,
+                    y: boundary.position.y 
+                  }}
+              })
+            ) {
+              moving = false
+              break
+            }
+          }
+          
+          if (moving) {
+            movables.forEach((movable)=>{
+              movable.position.x -= player.velocity;
+            })}
         }
+
     }   
     if (keys.z.pressed && ((player.position.y - 2 - player.height / 2) > 0)) {
         if (keys.q.pressed || keys.d.pressed) {
-          movables.forEach((movable)=>{
-            movable.position.y += diagonalVelocity;
-          })
+          for (let i = 0; i < map.boundaries.length; i++) {
+            const boundary = map.boundaries[i]
+            if (
+              rectangleCollision({
+                rectangle1: player,
+                rectangle2: {...boundary,
+                  position: {
+                    x: boundary.position.x,
+                    y: boundary.position.y + player.velocity
+                  }}
+              })
+            ) {
+              moving = false
+              break
+            }
+          }
+          
+          if (moving) {
+            movables.forEach((movable)=>{
+              movable.position.y += diagonalVelocity;
+            })}
+          
         } else {
-          movables.forEach((movable)=>{
-            movable.position.y += player.velocity;
-          })
+          for (let i = 0; i < map.boundaries.length; i++) {
+            const boundary = map.boundaries[i]
+            if (
+              rectangleCollision({
+                rectangle1: player,
+                rectangle2: {...boundary,
+                  position: {
+                    x: boundary.position.x,
+                    y: boundary.position.y + player.velocity
+                  }}
+              })
+            ) {
+              moving = false
+              break
+            }
+          }
+          
+          if (moving) {
+            movables.forEach((movable)=>{
+              movable.position.y += player.velocity;
+            })}
         }
     }
     if (keys.q.pressed && ((player.position.x - 2 - player.width / 2) > 0)) {
         if (keys.z.pressed || keys.s.pressed) {
-          movables.forEach((movable)=>{
-            movable.position.x += diagonalVelocity;
-          })
+          for (let i = 0; i < map.boundaries.length; i++) {
+            const boundary = map.boundaries[i]
+            if (
+              rectangleCollision({
+                rectangle1: player,
+                rectangle2: {...boundary,
+                  position: {
+                    x: boundary.position.x + player.velocity,
+                    y: boundary.position.y 
+                  }}
+              })
+            ) {
+              moving = false
+              break
+            }
+          }
+          
+          if (moving) {
+            movables.forEach((movable)=>{
+              movable.position.x += diagonalVelocity;
+            })}
+          
         } else {
-          movables.forEach((movable)=>{
-            movable.position.x += player.velocity;
-          })
+          for (let i = 0; i < map.boundaries.length; i++) {
+            const boundary = map.boundaries[i]
+            if (
+              rectangleCollision({
+                rectangle1: player,
+                rectangle2: {...boundary,
+                  position: {
+                    x: boundary.position.x + player.velocity,
+                    y: boundary.position.y
+                  }}
+              })
+            ) {
+              moving = false
+              break
+            }
+          }
+          
+          if (moving) {
+            movables.forEach((movable)=>{
+              movable.position.x += player.velocity;
+            })}
         }
     }
     if (keys.s.pressed && ((player.position.y + 2 + player.height / 2) < canvas.height)) {
         if (keys.q.pressed || keys.d.pressed) {
-          movables.forEach((movable)=>{
-            movable.position.y -= diagonalVelocity;
-          })
+          for (let i = 0; i < map.boundaries.length; i++) {
+            const boundary = map.boundaries[i]
+            if (
+              rectangleCollision({
+                rectangle1: player,
+                rectangle2: {...boundary,
+                  position: {
+                    x: boundary.position.x,
+                    y: boundary.position.y - player.velocity
+                  }}
+              })
+            ) {
+              moving = false
+              break
+            }
+          }
+          
+          if (moving) {
+            movables.forEach((movable)=>{
+              movable.position.y -= diagonalVelocity;
+            })}
         } else {
-          movables.forEach((movable)=>{
-            movable.position.y -= player.velocity;
-          })
+          for (let i = 0; i < map.boundaries.length; i++) {
+            const boundary = map.boundaries[i]
+            if (
+              rectangleCollision({
+                rectangle1: player,
+                rectangle2: {...boundary,
+                  position: {
+                    x: boundary.position.x,
+                    y: boundary.position.y - player.velocity
+                  }}
+              })
+            ) {
+              moving = false
+              break
+            }
+          }
+          
+          if (moving) {
+            movables.forEach((movable)=>{
+              movable.position.y -= player.velocity;
+            })}
         }
     }
 }

@@ -49,7 +49,6 @@ const keys = {
 
 function animate() {
     window.requestAnimationFrame(animate);
-    
     c.clearRect(0, 0, canvas.width, canvas.height);
 
     if (player.health == 0){ // Verif Mort
