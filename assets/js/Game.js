@@ -28,6 +28,9 @@ const maps = [
     new Map({ x: offset.x, y: offset.y }, map6image, getcollision(5)),
     new Map({ x: offset.x, y: offset.y }, mapfinalimage, getcollision(6))
 ];
+const foreground = [
+    new Map({ x: offset.x, y: offset.y }, foreground1, getcollision(0)),
+]
 
 const keys = {
     d: {
@@ -67,17 +70,19 @@ function animate() {
 
 function Game() {
     const currentMap = maps[player.mapindex];
+    const currentfore = foreground[player.mapindex];
     currentMap.draw();
     
-    // currentMap.boundaries.forEach(boundary =>{
-    //     boundary.draw()
-    // })
+    currentMap.boundaries.forEach(boundary =>{
+        boundary.draw()
+    })
 
-    playerMove(currentMap);
+    playerMove(currentMap,currentfore);
     
     // drawMutants(player.mapindex);
     // drawNpc(player.mapindex);
     player.update();
+    currentfore.draw()
 }
 
 function chooseClass(className) {

@@ -20,7 +20,6 @@ class Player {
         }
         this.classes = "";
 
-        this.alive = true;
         this.maxHealth = -1;
         this.health = this.maxHealth;
         this.maxStamina = 100;
@@ -63,7 +62,7 @@ class Player {
             this.frames.elapsed++
         }
         
-        if (this.frames.elapsed % 10 === 0){
+        if (this.frames.elapsed % 20 === 0){
             if (this.frames.val < this.frames.max - 1) this.frames.val++
             else this.frames.val = 0
         }
@@ -79,9 +78,8 @@ class Player {
             this.stamina = this.maxStamina;
             this.weapon = new Weapon;
 
-            this.velocity = 2.00;
-            this.width = 20;
-            this.height = 40;
+            this.velocity = 1.7;
+
         } else if (this.classes == "melee") {
             this.maxHealth = 250;
             this.health = this.maxHealth;
@@ -89,9 +87,7 @@ class Player {
             this.stamina = this.maxStamina;
             this.weapon = new Weapon;
 
-            this.velocity = 1.80;
-            this.width = 30;
-            this.height = 40;
+            this.velocity = 1.60;
         }
     }
 
@@ -143,7 +139,6 @@ class Player {
 
     takeDamage(damage){
         if ((this.health-damage)<0) {
-            this.alive = false;
             this.health = 0;
         } else {
             this.health -= damage;

@@ -1,6 +1,8 @@
-
 const map1image = new Image()
 map1image.src = 'assets/img/map/Island1.png'
+
+const foreground1 = new Image()
+foreground1.src = 'assets/img/map/foreground1.png'
 
 const map2image = new Image()
 map2image.src = 'assets/img/map/Island2.png'
@@ -66,9 +68,9 @@ class Boundary {
 
 
 
-function playerMove(map) {
+function playerMove(map,foreground) {
     const diagonalVelocity = player.velocity / Math.sqrt(2);
-    const movables = [map, ...map.boundaries]
+    const movables = [map, ...map.boundaries,foreground]
     
     let moving = true
     player.animate = false
