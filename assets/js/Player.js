@@ -11,7 +11,7 @@ const playerRightImage = new Image()
 playerRightImage.src = 'assets/img/player/playerRight.png'
 
 class Player {
-    constructor(position, frames) {
+    constructor(position, frames, animate = false) {
         this.mapindex = -1;
         this.position = position;
         this.pourcentpos = {
@@ -36,7 +36,7 @@ class Player {
         this.playerLeftImage = playerLeftImage;
         this.playerRightImage = playerRightImage;
         this.playerImage = this.playerDownImage;
-
+        this.animate =animate
         this.playerImage.onload = () => {
             this.width = (this.playerImage.width / this.frames.max)
             this.height = this.playerImage.height
@@ -56,6 +56,8 @@ class Player {
             this.playerImage.width / this.frames.max ,
             this.playerImage.height
         )
+
+        if (!this.animate) return
 
         if (this.frames.max > 1){
             this.frames.elapsed++

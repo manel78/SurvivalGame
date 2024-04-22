@@ -69,11 +69,13 @@ class Boundary {
 function playerMove(map) {
     const diagonalVelocity = player.velocity / Math.sqrt(2);
     const movables = [map, ...map.boundaries]
+    
     let moving = true
+    player.animate = false
 
     if (keys.d.pressed && ((player.position.x + 2 + player.width / 2) < canvas.width)) {
         if (keys.z.pressed || keys.s.pressed) {
-          player.moving =true
+          player.animate = true
           for (let i = 0; i < map.boundaries.length; i++) {
             const boundary = map.boundaries[i]
             if (
@@ -98,6 +100,7 @@ function playerMove(map) {
             })}
 
         } else {
+          player.animate = true
           for (let i = 0; i < map.boundaries.length; i++) {
             const boundary = map.boundaries[i]
             if (
@@ -125,6 +128,7 @@ function playerMove(map) {
     }   
     if (keys.z.pressed && ((player.position.y - 2 - player.height / 2) > 0)) {
         if (keys.q.pressed || keys.d.pressed) {
+          player.animate = true
           for (let i = 0; i < map.boundaries.length; i++) {
             const boundary = map.boundaries[i]
             if (
@@ -149,6 +153,7 @@ function playerMove(map) {
             })}
           
         } else {
+          player.animate = true
           for (let i = 0; i < map.boundaries.length; i++) {
             const boundary = map.boundaries[i]
             if (
@@ -175,6 +180,7 @@ function playerMove(map) {
     }
     if (keys.q.pressed && ((player.position.x - 2 - player.width / 2) > 0)) {
         if (keys.z.pressed || keys.s.pressed) {
+          player.animate = true
           for (let i = 0; i < map.boundaries.length; i++) {
             const boundary = map.boundaries[i]
             if (
@@ -199,6 +205,7 @@ function playerMove(map) {
             })}
           
         } else {
+          player.animate = true
           for (let i = 0; i < map.boundaries.length; i++) {
             const boundary = map.boundaries[i]
             if (
@@ -225,6 +232,7 @@ function playerMove(map) {
     }
     if (keys.s.pressed && ((player.position.y + 2 + player.height / 2) < canvas.height)) {
         if (keys.q.pressed || keys.d.pressed) {
+          player.animate = true
           for (let i = 0; i < map.boundaries.length; i++) {
             const boundary = map.boundaries[i]
             if (
@@ -248,6 +256,7 @@ function playerMove(map) {
               movable.position.y -= diagonalVelocity;
             })}
         } else {
+          player.animate = true
           for (let i = 0; i < map.boundaries.length; i++) {
             const boundary = map.boundaries[i]
             if (
