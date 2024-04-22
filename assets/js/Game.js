@@ -15,9 +15,9 @@ let changemapkey = false;
 let lastJKeyPressTime = 0;
 
 const player = new Player({
-    x: canvas.width/2,
-    y: canvas.height/2,
-  }, canvas);
+    x: canvas.width / 2 - 192 / 4 / 2,
+    y: canvas.height / 2 - 68 / 2
+}, 4);
 
 const maps = [
     new Map({ x: offset.x, y: offset.y }, map1image, getcollision(0)),
@@ -69,13 +69,9 @@ function Game() {
     const currentMap = maps[player.mapindex];
     currentMap.draw();
     
-    currentMap.boundaries.forEach(boundary =>{
-        boundary.draw()
-
-        if (rectangleCollision({ rectangle1: player, rectangle2: boundary })) {
-            console.log('colliding');
-        }
-    })
+    // currentMap.boundaries.forEach(boundary =>{
+    //     boundary.draw()
+    // })
 
     playerMove(currentMap);
     

@@ -2,16 +2,16 @@ const playerDownImage = new Image()
 playerDownImage.src = 'assets/img/player/playerDown.png'
 
 const playerUpImage = new Image()
-playerUpImage.src = 'assets/img/player/playerLeft.png'
+playerUpImage.src = 'assets/img/player/playerUp.png'
 
 const playerLeftImage = new Image()
-playerLeftImage.src = 'assets/img/player/playerRight.png'
+playerLeftImage.src = 'assets/img/player/playerLeft.png'
 
 const playerRightImage = new Image()
-playerRightImage.src = 'assets/img/player/playerUp.png'
+playerRightImage.src = 'assets/img/player/playerRight.png'
 
 class Player {
-    constructor(position) {
+    constructor(position, frames) {
         this.mapindex = -1;
         this.position = position;
         this.pourcentpos = {
@@ -29,16 +29,44 @@ class Player {
 
         this.velocity = 0;
 
-        this.color = 'white';
+        this.frames = { max :frames, val: 0, elapsed: 0 }
+
         this.playerDownImage = playerDownImage;
         this.playerUpImage = playerUpImage;
         this.playerLeftImage = playerLeftImage;
         this.playerRightImage = playerRightImage;
         this.playerImage = this.playerDownImage;
-        this.width = this.playerImage.width/4;
-        this.height = this.playerImage.height;
+
+        this.playerImage.onload = () => {
+            this.width = (this.playerImage.width / this.frames.max)
+            this.height = this.playerImage.height
+        }
         this.shadowColor = 'rgba(0, 0, 0, 0.3)'; // Couleur de l'ombre
     }
+
+    draw() {
+        c.drawImage(
+            this.playerImage, 
+            this.playerImage.width/4 * this.frames.val,
+            0,
+            this.playerImage.width / this.frames.max ,
+            this.playerImage.height,
+            this.position.x,
+            this.position.y,
+            this.playerImage.width / this.frames.max ,
+            this.playerImage.height
+        )
+
+        if (this.frames.max > 1){
+            this.frames.elapsed++
+        }
+        
+        if (this.frames.elapsed % 10 === 0){
+            if (this.frames.val < this.frames.max - 1) this.frames.val++
+            else this.frames.val = 0
+        }
+    }
+
 
     setStats(className){
         this.classes = className;
@@ -63,19 +91,6 @@ class Player {
             this.width = 30;
             this.height = 40;
         }
-    }
-
-    draw() {
-        c.drawImage(this.playerImage, 
-            0,
-            0,
-            this.playerImage.width/4,
-            this.playerImage.height,
-            this.position.x - this.playerImage.width/8,
-            this.position.y - this.playerImage.height / 2,
-            this.playerImage.width/4,
-            this.playerImage.height
-            )
     }
 
     drawHealthBar() {
@@ -107,14 +122,6 @@ class Player {
         c.strokeRect(canvas.width-canvas.width/6-1, canvas.height/6+11, canvas.width/6, barHeight);
     }
 
-    drawShadow() {
-        c.save();
-        c.beginPath();
-        c.arc(this.position.x, this.position.y - 5 + this.height / 2, this.width / 2, 0, Math.PI * 2);
-        c.fillStyle = this.shadowColor;
-        c.fill();
-        c.restore();
-    }
 
     minimap(){
         this.pourcentpos = {
@@ -143,7 +150,6 @@ class Player {
 
     update() {
         this.minimap();
-        this.drawShadow();
         this.drawHealthBar();
         this.drawStaminaBar();
         this.draw();

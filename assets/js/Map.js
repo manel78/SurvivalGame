@@ -73,6 +73,7 @@ function playerMove(map) {
 
     if (keys.d.pressed && ((player.position.x + 2 + player.width / 2) < canvas.width)) {
         if (keys.z.pressed || keys.s.pressed) {
+          player.moving =true
           for (let i = 0; i < map.boundaries.length; i++) {
             const boundary = map.boundaries[i]
             if (
@@ -91,6 +92,7 @@ function playerMove(map) {
           }
           
           if (moving) {
+            player.playerImage = playerRightImage
             movables.forEach((movable)=>{
               movable.position.x -= diagonalVelocity;
             })}
@@ -114,6 +116,7 @@ function playerMove(map) {
           }
           
           if (moving) {
+            player.playerImage = playerRightImage
             movables.forEach((movable)=>{
               movable.position.x -= player.velocity;
             })}
@@ -140,6 +143,7 @@ function playerMove(map) {
           }
           
           if (moving) {
+            player.playerImage = playerUpImage;
             movables.forEach((movable)=>{
               movable.position.y += diagonalVelocity;
             })}
@@ -163,6 +167,7 @@ function playerMove(map) {
           }
           
           if (moving) {
+            player.playerImage = playerUpImage;
             movables.forEach((movable)=>{
               movable.position.y += player.velocity;
             })}
@@ -188,6 +193,7 @@ function playerMove(map) {
           }
           
           if (moving) {
+            player.playerImage = playerLeftImage;
             movables.forEach((movable)=>{
               movable.position.x += diagonalVelocity;
             })}
@@ -211,6 +217,7 @@ function playerMove(map) {
           }
           
           if (moving) {
+            player.playerImage = playerLeftImage;
             movables.forEach((movable)=>{
               movable.position.x += player.velocity;
             })}
@@ -236,6 +243,7 @@ function playerMove(map) {
           }
           
           if (moving) {
+            player.playerImage = playerDownImage;
             movables.forEach((movable)=>{
               movable.position.y -= diagonalVelocity;
             })}
@@ -258,13 +266,13 @@ function playerMove(map) {
           }
           
           if (moving) {
+            player.playerImage = playerDownImage;
             movables.forEach((movable)=>{
               movable.position.y -= player.velocity;
             })}
         }
     }
 }
-
 
 function getcollision(map){
   const collisionsMap = []
