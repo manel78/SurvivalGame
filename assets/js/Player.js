@@ -150,36 +150,3 @@ class Player {
     }
 }
 
-
-function playerMove(currentMap) {
-    const diagonalVelocity = player.velocity / Math.sqrt(2);
-
-    if (keys.d.pressed && ((player.position.x + 2 + player.width / 2) < canvas.width)) {
-        if (keys.z.pressed || keys.s.pressed) {
-            currentMap.position.x -= diagonalVelocity;
-        } else {
-            currentMap.position.x -= player.velocity;
-        }
-    }   
-    if (keys.z.pressed && ((player.position.y - 2 - player.height / 2) > 0)) {
-        if (keys.q.pressed || keys.d.pressed) {
-            currentMap.position.y += diagonalVelocity;
-        } else {
-            currentMap.position.y += player.velocity;
-        }
-    }
-    if (keys.q.pressed && ((player.position.x - 2 - player.width / 2) > 0)) {
-        if (keys.z.pressed || keys.s.pressed) {
-            currentMap.position.x += diagonalVelocity;
-        } else {
-            currentMap.position.x += player.velocity;
-        }
-    }
-    if (keys.s.pressed && ((player.position.y + 2 + player.height / 2) < canvas.height)) {
-        if (keys.q.pressed || keys.d.pressed) {
-            currentMap.position.y -= diagonalVelocity;
-        } else {
-            currentMap.position.y -= player.velocity;
-        }
-    }
-}

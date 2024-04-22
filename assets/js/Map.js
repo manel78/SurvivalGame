@@ -21,6 +21,14 @@ const mapfinalimage = new Image()
 mapfinalimage.src = 'assets/img/map/IslandFinal.png'
 
 
+function rectangleCollision({ rectangle1, rectangle2 }) {
+  return (
+      rectangle1.position.x + rectangle1.width >= rectangle2.position.x &&
+      rectangle1.position.x <= rectangle2.position.x + rectangle2.width &&
+      rectangle1.position.y <= rectangle2.position.y + rectangle2.height &&
+      rectangle1.position.y + rectangle1.height >= rectangle2.position.y
+  );
+}
 
 const offset = {
   x: -785,
@@ -28,9 +36,10 @@ const offset = {
 }
 
 class Map {
-    constructor(position, image){
+    constructor(position, image, boundaries){
         this.position = position;
         this.image = image;
+        this.boundaries = boundaries
     }
 
     draw(){
@@ -53,48 +62,96 @@ class Boundary {
     }
 }
 
-function getcollision(){
-      
+function playerMove(map) {
+
+    const diagonalVelocity = player.velocity / Math.sqrt(2);
+    const movables = [map, ...map.boundaries]
+    if (keys.d.pressed && ((player.position.x + 2 + player.width / 2) < canvas.width)) {
+        if (keys.z.pressed || keys.s.pressed) {
+          movables.forEach((movable)=>{
+            movable.position.x -= diagonalVelocity;
+          })
+        } else {
+          movables.forEach((movable)=>{
+            movable.position.x -= player.velocity;
+          })
+        }
+    }   
+    if (keys.z.pressed && ((player.position.y - 2 - player.height / 2) > 0)) {
+        if (keys.q.pressed || keys.d.pressed) {
+          movables.forEach((movable)=>{
+            movable.position.y += diagonalVelocity;
+          })
+        } else {
+          movables.forEach((movable)=>{
+            movable.position.y += player.velocity;
+          })
+        }
+    }
+    if (keys.q.pressed && ((player.position.x - 2 - player.width / 2) > 0)) {
+        if (keys.z.pressed || keys.s.pressed) {
+          movables.forEach((movable)=>{
+            movable.position.x += diagonalVelocity;
+          })
+        } else {
+          movables.forEach((movable)=>{
+            movable.position.x += player.velocity;
+          })
+        }
+    }
+    if (keys.s.pressed && ((player.position.y + 2 + player.height / 2) < canvas.height)) {
+        if (keys.q.pressed || keys.d.pressed) {
+          movables.forEach((movable)=>{
+            movable.position.y -= diagonalVelocity;
+          })
+        } else {
+          movables.forEach((movable)=>{
+            movable.position.y -= player.velocity;
+          })
+        }
+    }
+}
+
+
+function getcollision(map){
   const collisionsMap = []
-  if (player.mapindex == 0) {
+  if (map == 0) {
     for (let i = 0; i < Island1Collison.length; i += 90) {
       collisionsMap.push(Island1Collison.slice(i, 90 + i))
     }
 
-  } else if (player.mapindex == 1) {
+  } else if (map == 1) {
     for (let i = 0; i < Island2Collison.length; i += 90) {
       collisionsMap.push(Island2Collison.slice(i, 90 + i))
     }
 
-  } else if (player.mapindex == 2) {
+  } else if (map == 2) {
     for (let i = 0; i < Island3Collison.length; i += 90) {
       collisionsMap.push(Island3Collison.slice(i, 90 + i))
     }
 
-  } else if (player.mapindex == 3) {
+  } else if (map == 3) {
     for (let i = 0; i < Island4Collison.length; i += 90) {
       collisionsMap.push(Island4Collison.slice(i, 90 + i))
     }
 
-  } else if (player.mapindex == 4) {
+  } else if (map == 4) {
     for (let i = 0; i < Island5Collison.length; i += 90) {
       collisionsMap.push(Island5Collison.slice(i, 90 + i))
     }
 
-  } else if (player.mapindex == 5) {
+  } else if (map == 5) {
     for (let i = 0; i < Island6Collison.length; i += 90) {
       collisionsMap.push(Island6Collison.slice(i, 90 + i))
     }
 
-  } else if (player.mapindex == 6) {
+  } else if (map == 6) {
     for (let i = 0; i < IslandFinalCollison.length; i += 90) {
       collisionsMap.push(IslandFinalCollison.slice(i, 90 + i))
     }
 
   } 
-  console.log(collisionsMap)
   const boundaries = []
-
   collisionsMap.forEach((row, i) => {
       row.forEach((symbol, j) => {
         if (symbol != 0)
@@ -108,13 +165,5 @@ function getcollision(){
           )
       })
     })
-
-    console.log(boundaries)
     return boundaries
 }
-
-
-// for (let i = 0; i < Island1Collison.length; i += 90) {
-//   collisionsMap.push(Island1Collison.slice(i, 90 + i))
-// }
-

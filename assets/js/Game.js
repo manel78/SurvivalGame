@@ -14,28 +14,19 @@ let selectedClass = '';
 let changemapkey = false;
 let lastJKeyPressTime = 0;
 
-function rectangleCollision({ rectangle1, rectangle2 }) {
-    return (
-        rectangle1.position.x + rectangle1.width >= rectangle2.position.x &&
-        rectangle1.position.x <= rectangle2.position.x + rectangle2.width &&
-        rectangle1.position.y <= rectangle2.position.y + rectangle2.height &&
-        rectangle1.position.y + rectangle1.height >= rectangle2.position.y
-    );
-}
-
 const player = new Player({
     x: canvas.width/2,
     y: canvas.height/2,
   }, canvas);
 
 const maps = [
-    new Map({ x: offset.x, y: offset.y }, map1image),
-    new Map({ x: offset.x, y: offset.y }, map2image),
-    new Map({ x: offset.x, y: offset.y }, map3image),
-    new Map({ x: offset.x, y: offset.y }, map4image),
-    new Map({ x: offset.x, y: offset.y }, map5image),
-    new Map({ x: offset.x, y: offset.y }, map6image),
-    new Map({ x: offset.x, y: offset.y }, mapfinalimage)
+    new Map({ x: offset.x, y: offset.y }, map1image, getcollision(0)),
+    new Map({ x: offset.x, y: offset.y }, map2image, getcollision(1)),
+    new Map({ x: offset.x, y: offset.y }, map3image, getcollision(2)),
+    new Map({ x: offset.x, y: offset.y }, map4image, getcollision(3)),
+    new Map({ x: offset.x, y: offset.y }, map5image, getcollision(4)),
+    new Map({ x: offset.x, y: offset.y }, map6image, getcollision(5)),
+    new Map({ x: offset.x, y: offset.y }, mapfinalimage, getcollision(6))
 ];
 
 const keys = {
@@ -77,13 +68,17 @@ function animate() {
 
 function Game() {
     const currentMap = maps[player.mapindex];
-    playerMove(currentMap);
     currentMap.draw();
-
-    boundaries = getcollision()
-    boundaries.forEach(boundary =>{
+    
+    currentMap.boundaries.forEach(boundary =>{
         boundary.draw()
+
+        if (rectangleCollision({ rectangle1: player, rectangle2: boundary })) {
+            console.log('colliding');
+        }
     })
+
+    playerMove(currentMap);
     
     // drawMutants(player.mapindex);
     // drawNpc(player.mapindex);
