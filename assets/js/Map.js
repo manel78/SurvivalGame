@@ -7,20 +7,115 @@ foreground1.src = 'assets/img/map/foreground1.png'
 const map2image = new Image()
 map2image.src = 'assets/img/map/Island2.png'
 
+const foreground2 = new Image()
+foreground2.src = 'assets/img/map/foreground2.png'
+
 const map3image = new Image()
 map3image.src = 'assets/img/map/Island3.png'
+
+const foreground3 = new Image()
+foreground3.src = 'assets/img/map/foreground3.png'
 
 const map4image = new Image()
 map4image.src = 'assets/img/map/Island4.png'
 
+const foreground4 = new Image()
+foreground4.src = 'assets/img/map/foreground4.png'
+
 const map5image = new Image()
 map5image.src = 'assets/img/map/Island5.png'
+
+const foreground5 = new Image()
+foreground5.src = 'assets/img/map/foreground5.png'
 
 const map6image = new Image()
 map6image.src = 'assets/img/map/Island6.png'
 
+const foreground6 = new Image()
+foreground6.src = 'assets/img/map/foreground6.png'
+
 const mapfinalimage = new Image()
 mapfinalimage.src = 'assets/img/map/IslandFinal.png'
+
+const foregroundfinal = new Image()
+foregroundfinal.src = 'assets/img/map/foreground7.png'
+
+
+class Map {
+  constructor(position, image, boundaries, startpos, endpos){
+      this.position = position;
+      this.image = image;
+      this.boundaries = boundaries
+      this.startpos = startpos
+      this.endpos= endpos
+  }
+
+  draw(){
+      c.drawImage(this.image, this.position.x, this.position.y)
+  }
+}
+
+class Boundary {
+  static width = 48
+  static height = 48
+  constructor({ position }) {
+    this.position = position
+    this.width = 48
+    this.height = 48
+  }
+
+  draw() {
+    c.fillStyle = 'rgba(255, 0, 0, 0.3)'
+    c.fillRect(this.position.x, this.position.y, this.width, this.height)
+  }
+}
+
+const offset = {
+  x: -785,
+  y: -650
+}
+
+const maps = [
+  new Map({ x: offset.x, y: offset.y }, map1image, getcollision(0),{ x: 200, y: -1140 }, -3249), // -3454.0764966054508 -1084.3271465194036
+  new Map({ x: offset.x, y: offset.y }, map2image, getcollision(1),{ x: 243, y: -894 }, -3590),
+  new Map({ x: offset.x, y: offset.y }, map3image, getcollision(2),{ x: 413, y: -745 }, -3644),
+  new Map({ x: offset.x, y: offset.y }, map4image, getcollision(3),{ x: 0, y: -1100 }, -3265),
+  new Map({ x: offset.x, y: offset.y }, map5image, getcollision(4),{ x: 0, y: -1040 }, -3158),
+  new Map({ x: offset.x, y: offset.y }, map6image, getcollision(5),{ x: 41, y: -800 }, -3476),
+  new Map({ x: offset.x, y: offset.y }, mapfinalimage, getcollision(6),{ x: -116, y: -940 }, -3215)
+];
+const foreground = [
+  new Map({ x: offset.x, y: offset.y }, foreground1, getcollision(0)),
+  new Map({ x: offset.x, y: offset.y }, foreground2, getcollision(0)),
+  new Map({ x: offset.x, y: offset.y }, foreground3, getcollision(0)),
+  new Map({ x: offset.x, y: offset.y }, foreground4, getcollision(0)),
+  new Map({ x: offset.x, y: offset.y }, foreground5, getcollision(0)),
+  new Map({ x: offset.x, y: offset.y }, foreground6, getcollision(0)),
+  new Map({ x: offset.x, y: offset.y }, foregroundfinal, getcollision(0)),
+]
+
+
+function changemap(currentMap,currentfore,changingmap) {
+  next = currentMap.startpos;
+  old = currentMap.position
+  diff = {
+      x: next.x - old.x,
+      y: next.y - old.y
+  }
+  currentMap.position.x  += diff.x
+  currentMap.position.y  += diff.y
+
+  currentfore.position.x += diff.x
+  currentfore.position.y += diff.y
+
+  currentMap.boundaries.forEach(elements =>{
+      elements.position.x += diff.x
+      elements.position.y += diff.y
+  })
+  changingmap = false;
+
+  return currentMap,currentfore,changingmap
+}
 
 
 function rectangleCollision({ rectangle1, rectangle2 }) {
@@ -31,42 +126,6 @@ function rectangleCollision({ rectangle1, rectangle2 }) {
     rectangle1.position.y + rectangle1.height >= rectangle2.position.y
   )
 }
-
-const offset = {
-  x: -785,
-  y: -650
-}
-
-class Map {
-    constructor(position, image, boundaries){
-        this.position = position;
-        this.image = image;
-        this.boundaries = boundaries
-    }
-
-    draw(){
-        c.drawImage(this.image, this.position.x, this.position.y)
-    }
-}
-
-class Boundary {
-    static width = 48
-    static height = 48
-    constructor({ position }) {
-      this.position = position
-      this.width = 48
-      this.height = 48
-    }
-  
-    draw() {
-      c.fillStyle = 'rgba(255, 0, 0, 0.3)'
-      c.fillRect(this.position.x, this.position.y, this.width, this.height)
-    }
-}
-
-
-
-
 
 function playerMove(map,foreground) {
     const diagonalVelocity = player.velocity / Math.sqrt(2);

@@ -12,25 +12,18 @@ const scaledCanvas = {
 };
 let selectedClass = '';
 let changemapkey = false;
+let printposkey = false;
 let lastJKeyPressTime = 0;
+let lastGKeyPressTime = 0;
 
 const player = new Player({
     x: canvas.width / 2 - 192 / 4 / 2,
     y: canvas.height / 2 - 68 / 2
 }, 4);
 
-const maps = [
-    new Map({ x: offset.x, y: offset.y }, map1image, getcollision(0)),
-    new Map({ x: offset.x, y: offset.y }, map2image, getcollision(1)),
-    new Map({ x: offset.x, y: offset.y }, map3image, getcollision(2)),
-    new Map({ x: offset.x, y: offset.y }, map4image, getcollision(3)),
-    new Map({ x: offset.x, y: offset.y }, map5image, getcollision(4)),
-    new Map({ x: offset.x, y: offset.y }, map6image, getcollision(5)),
-    new Map({ x: offset.x, y: offset.y }, mapfinalimage, getcollision(6))
-];
-const foreground = [
-    new Map({ x: offset.x, y: offset.y }, foreground1, getcollision(0)),
-]
+let changingmap = true
+let currentMap = maps[player.mapindex];
+let currentfore = foreground[player.mapindex];
 
 const keys = {
     d: {
@@ -46,6 +39,9 @@ const keys = {
         pressed: false,
     },
     j: {
+        pressed: false,
+    },
+    g: {
         pressed: false,
     },
 };
@@ -69,10 +65,14 @@ function animate() {
 }
 
 function Game() {
-    const currentMap = maps[player.mapindex];
-    const currentfore = foreground[player.mapindex];
+    currentMap = maps[player.mapindex];
+    currentfore = foreground[player.mapindex];
     currentMap.draw();
     
+    if (changingmap) {
+        currentMap,currentfore,changingmap = changemap(currentMap,currentfore,changingmap)
+    }
+
     currentMap.boundaries.forEach(boundary =>{
         boundary.draw()
     })
@@ -81,7 +81,9 @@ function Game() {
     
     // drawMutants(player.mapindex);
     // drawNpc(player.mapindex);
+
     player.update();
+    player.minimap(currentMap)
     currentfore.draw()
 }
 
@@ -116,10 +118,8 @@ canvas.addEventListener('click', function(event) {
         mouseY >= canvas.height / 2 && mouseY <= canvas.height / 2 + 60) {
             location.reload();
             animate();
-    }
-
-        
-    }
+        } 
+    } 
 });
 
 window.addEventListener('keydown', (event) => {
@@ -140,6 +140,14 @@ window.addEventListener('keydown', (event) => {
             keys.s.pressed = true;
             break;
 
+        case 'g':
+            if (Date.now() - lastGKeyPressTime > 500) { // 500 millisecondes de cooldown
+                console.log(player.mapindex)
+                console.log(currentMap.position.x,currentMap.position.y)
+                lastGKeyPressTime = Date.now();
+            }
+            break;
+
         case 'j':
             if (Date.now() - lastJKeyPressTime > 500) { // 500 millisecondes de cooldown
                 if (player.mapindex == 6){
@@ -147,6 +155,7 @@ window.addEventListener('keydown', (event) => {
                 }else {
                     player.mapindex += 1;
                 }
+                changingmap = true
                 lastJKeyPressTime = Date.now();
             }
             break;
@@ -174,6 +183,10 @@ window.addEventListener('keyup', (event) => {
         
         case 'j':
             changemapkey = false;
+            break;
+
+        case 'g':
+            printposkey = false;
             break;
     
 

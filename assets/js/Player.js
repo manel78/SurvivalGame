@@ -38,7 +38,7 @@ class Player {
         this.animate =animate
         this.playerImage.onload = () => {
             this.width = (this.playerImage.width / this.frames.max)
-            this.height = this.playerImage.height
+            this.height = this.playerImage.height * (3/5)
         }
         this.shadowColor = 'rgba(0, 0, 0, 0.3)'; // Couleur de l'ombre
     }
@@ -51,7 +51,7 @@ class Player {
             this.playerImage.width / this.frames.max ,
             this.playerImage.height,
             this.position.x,
-            this.position.y,
+            this.position.y - this.playerImage.height * (2/5),
             this.playerImage.width / this.frames.max ,
             this.playerImage.height
         )
@@ -121,14 +121,15 @@ class Player {
     }
 
 
-    minimap(){
+    minimap(map){
         this.pourcentpos = {
-            x: (this.position.x/canvas.width),
-            y: (this.position.y/canvas.height),
+            x: ((map.position.x + offset.x)*-1/map.image.width),
+            y: ((map.position.y+ offset.y)*-1/map.image.height),
         }
 
-        c.fillStyle = 'lightblue';
-        c.fillRect(canvas.width-canvas.width/6, 1, canvas.width/6, canvas.height/6);
+        map.image.onload = function() {
+            c.drawImage(map.image, canvas.width - canvas.width / 6, 1, canvas.width / 6, canvas.height / 6);
+        };
 
         c.strokeStyle = 'black';
         c.strokeRect(canvas.width-canvas.width/6-1, 1, canvas.width/6, canvas.height/6);
@@ -146,7 +147,7 @@ class Player {
     }
 
     update() {
-        this.minimap();
+        // this.minimap();
         this.drawHealthBar();
         this.drawStaminaBar();
         this.draw();
