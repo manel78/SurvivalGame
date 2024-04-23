@@ -69,7 +69,7 @@ function Game() {
     currentfore = foreground[player.mapindex];
     currentMap.draw();
 
-    
+    console.log(maps[player.mapindex].image.width)
     if (verificationmap(currentMap)){
         if (player.mapindex == 6){
             player.mapindex = 0

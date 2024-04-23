@@ -76,13 +76,13 @@ const offset = {
 }
 
 const maps = [
-  new Map({ x: offset.x, y: offset.y }, map1image, getcollision(0),{ x: 200, y: -1140 }, -3249), // -3454.0764966054508 -1084.3271465194036
-  new Map({ x: offset.x, y: offset.y }, map2image, getcollision(1),{ x: 243, y: -894 }, -3590),
-  new Map({ x: offset.x, y: offset.y }, map3image, getcollision(2),{ x: 413, y: -745 }, -3644),
-  new Map({ x: offset.x, y: offset.y }, map4image, getcollision(3),{ x: 0, y: -1100 }, -3265),
-  new Map({ x: offset.x, y: offset.y }, map5image, getcollision(4),{ x: 0, y: -1040 }, -3158),
-  new Map({ x: offset.x, y: offset.y }, map6image, getcollision(5),{ x: 41, y: -800 }, -3476),
-  new Map({ x: offset.x, y: offset.y }, mapfinalimage, getcollision(6),{ x: -116, y: -940 }, -3215)
+  new Map({ x: offset.x, y: offset.y }, map1image, getcollision(0),{ x: -offset.x, y: -1140 }, -3249), // -3454.0764966054508 -1084.3271465194036
+  new Map({ x: offset.x, y: offset.y }, map2image, getcollision(1),{ x: -offset.x, y: -894 }, -3249),
+  new Map({ x: offset.x, y: offset.y }, map3image, getcollision(2),{ x: -offset.x, y: -745 }, -3249),
+  new Map({ x: offset.x, y: offset.y }, map4image, getcollision(3),{ x: -offset.x, y: -1100 }, -3249),
+  new Map({ x: offset.x, y: offset.y }, map5image, getcollision(4),{ x: -offset.x, y: -1040 }, -3249),
+  new Map({ x: offset.x, y: offset.y }, map6image, getcollision(5),{ x: -offset.x, y: -800 }, -3249),
+  new Map({ x: offset.x, y: offset.y }, mapfinalimage, getcollision(6),{ x: -offset.x, y: -940 }, -3249)
 ];
 const foreground = [
   new Map({ x: offset.x, y: offset.y }, foreground1, getcollision(0)),
