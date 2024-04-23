@@ -95,7 +95,9 @@ const foreground = [
 ]
 
 
-function changemap(currentMap,currentfore,changingmap) {
+function changemap(changingmap) {
+  currentMap = maps[player.mapindex];
+  currentfore = foreground[player.mapindex];
   next = currentMap.startpos;
   old = currentMap.position
   diff = {
@@ -117,6 +119,13 @@ function changemap(currentMap,currentfore,changingmap) {
   return currentMap,currentfore,changingmap
 }
 
+function verificationmap(currentMap){
+  if (currentMap.position.x < currentMap.endpos){
+    console.log(currentMap.position.x , currentMap.endpos)
+    return true
+  }
+  return false
+}
 
 function rectangleCollision({ rectangle1, rectangle2 }) {
   return (

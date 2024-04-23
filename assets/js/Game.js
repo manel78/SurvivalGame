@@ -68,9 +68,19 @@ function Game() {
     currentMap = maps[player.mapindex];
     currentfore = foreground[player.mapindex];
     currentMap.draw();
+
     
+    if (verificationmap(currentMap)){
+        if (player.mapindex == 6){
+            player.mapindex = 0
+        }else {
+            player.mapindex += 1;
+        }
+        changingmap = true
+    }
+
     if (changingmap) {
-        currentMap,currentfore,changingmap = changemap(currentMap,currentfore,changingmap)
+        currentMap,currentfore,changingmap = changemap(changingmap)
     }
 
     currentMap.boundaries.forEach(boundary =>{
