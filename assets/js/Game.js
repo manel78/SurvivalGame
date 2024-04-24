@@ -3,8 +3,8 @@ const c = canvas.getContext('2d');
 
 c.fillStyle = 'rgba(0,0,0)';
 
-canvas.width = window.innerWidth - (window.innerWidth / 4);
-canvas.height = window.innerHeight - (window.innerHeight / 8);
+canvas.width = window.innerWidth
+canvas.height = window.innerHeight
 
 const scaledCanvas = {
     width: canvas.width / 1,
