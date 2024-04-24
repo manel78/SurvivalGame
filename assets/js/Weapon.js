@@ -1,6 +1,5 @@
 let scoreglobal = 0;
 let nuc = 10;
-let speedmutant = 0;
 
 
 class Weapon {

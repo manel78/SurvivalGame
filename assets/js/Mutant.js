@@ -1,6 +1,7 @@
 const MutantImage =  new Image()
 MutantImage.src = 'assets/img/mutant/mutant.png'
 
+let speedmutant = 0;
 class Mutant {
     constructor(position) {
         this.position = position;
@@ -119,14 +120,9 @@ class Mutant {
 }
 
 function drawMutants(mapIndex) {
-    if (mapIndex >= 0 && mapIndex < mutants.length) {
-
-        mutants.forEach(mutant => {
-            mutant.update();
-        });
-    } else {
-        console.error("Index de carte invalide pour les mutants.");
-    }
+    mutants.forEach(mutant => {
+        mutant.update();
+    });
 }
 
 // Fonction pour générer des positions aléatoires sur la carte
@@ -159,7 +155,6 @@ let mutants = []
 
 const mutant1 = new Mutant({ x: 200, y: 100 })
 const mutant2 = new Mutant({ x: 200, y: 300 })
-
 mutants.push(mutant1)
 mutants.push(mutant2)
 

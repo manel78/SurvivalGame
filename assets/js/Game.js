@@ -16,8 +16,6 @@ const sworddance = new Weapon(8, 100, 500, sword);
 let selectedClass = '';
 let changemapkey = false;
 let printposkey = false;
-let lastJKeyPressTime = 0;
-let lastGKeyPressTime = 0;
 
 const player = new Player({
     x: canvas.width/2,
@@ -44,12 +42,6 @@ const keys = {
     z: {
         pressed: false,
     },
-    j: {
-        pressed: false,
-    },
-    g: {
-        pressed: false,
-    },
 };
 function animate() {
     window.requestAnimationFrame(animate);
@@ -65,7 +57,6 @@ function animate() {
         if (keys.a.pressed && f > 0) {
             sworddance.attack();
             keys.a.pressed = false;
-            console.log("reset")
             f--;
             // Réinitialiser la touche "a" après un délai de 4 secondes
             setTimeout(() => {
@@ -84,7 +75,6 @@ function Game() {
     currentfore = foreground[player.mapindex];
     currentMap.draw();
 
-    console.log(maps[player.mapindex].image.width)
     if (verificationmap(currentMap)){
         if (player.mapindex == 6){
             player.mapindex = 0
@@ -98,9 +88,9 @@ function Game() {
         currentMap,currentfore,changingmap = changemap(changingmap)
     }
 
-    currentMap.boundaries.forEach(boundary =>{
+    // currentMap.boundaries.forEach(boundary =>{
        // boundary.draw()
-    })
+    // })
 
     playerMove(currentMap,currentfore);
     drawMutants(player.mapindex);
@@ -167,25 +157,6 @@ window.addEventListener('keydown', (event) => {
             keys.s.pressed = true;
             break;
 
-        case 'g':
-            if (Date.now() - lastGKeyPressTime > 500) { // 500 millisecondes de cooldown
-                console.log(player.mapindex)
-                console.log(currentMap.position.x,currentMap.position.y)
-                lastGKeyPressTime = Date.now();
-            }
-            break;
-
-        case 'j':
-            if (Date.now() - lastJKeyPressTime > 500) { // 500 millisecondes de cooldown
-                if (player.mapindex == 6){
-                    player.mapindex = 0
-                }else {
-                    player.mapindex += 1;
-                }
-                changingmap = true
-                lastJKeyPressTime = Date.now();
-            }
-            break;
 
     }
 });
@@ -206,14 +177,6 @@ window.addEventListener('keyup', (event) => {
 
         case 's':
             keys.s.pressed = false;
-            break;
-        
-        case 'j':
-            changemapkey = false;
-            break;
-
-        case 'g':
-            printposkey = false;
             break;
     
 

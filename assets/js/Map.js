@@ -137,7 +137,7 @@ function rectangleCollision({ rectangle1, rectangle2 }) {
 
 function playerMove(map,foreground) {
     const diagonalVelocity = player.velocity / Math.sqrt(2);
-    const movables = [map, ...map.boundaries,foreground]
+    const movables = [map, ...map.boundaries,foreground, ...mutants]
     let moving = true
     player.animate = false
 
