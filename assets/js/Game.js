@@ -1,5 +1,7 @@
-// const canvas = document.querySelector('canvas');
-// const c = canvas.getContext('2d');
+const canvas = document.querySelector('canvas');
+const c = canvas.getContext('2d');
+
+c.fillStyle = 'rgba(0,0,0)';
 
 canvas.width = window.innerWidth - (window.innerWidth / 4);
 canvas.height = window.innerHeight - (window.innerHeight / 8);
@@ -8,14 +10,20 @@ const scaledCanvas = {
     width: canvas.width / 1,
     height: canvas.height / 1,
 };
-const wallsize = canvas.height / 20
+let selectedClass = '';
+let changemapkey = false;
+let printposkey = false;
+let lastJKeyPressTime = 0;
+let lastGKeyPressTime = 0;
 
 const player = new Player({
     x: canvas.width/2,
-    y: canvas.height/2,
-}, canvas);
+    y: canvas.height / 2
+}, 4);
 
-let selectedClass = '';
+let changingmap = true
+let currentMap = maps[player.mapindex];
+let currentfore = foreground[player.mapindex];
 
 const keys = {
     d: {
@@ -30,40 +38,63 @@ const keys = {
     z: {
         pressed: false,
     },
+    j: {
+        pressed: false,
+    },
+    g: {
+        pressed: false,
+    },
 };
 
 function animate() {
     window.requestAnimationFrame(animate);
-
     c.clearRect(0, 0, canvas.width, canvas.height);
 
-    if (player.mapindex == -1){
-        drawMenu();
-    } else {
+    if (player.health == 0){ // Verif Mort
+        player.mapindex = 7
+    } 
+    
+    if (player.mapindex == -1) {
+        drawClassMenu();
+    } else if (player.mapindex > -1 && player.mapindex <= 6) { // 6 Max
         Game();
-    }
+    } else if (player.mapindex == 7) {
+        drawDeathMenu();
+    } 
+    
 }
 
-animate();
+function Game() {
+    currentMap = maps[player.mapindex];
+    currentfore = foreground[player.mapindex];
+    currentMap.draw();
 
-function drawMenu() {
-    c.fillStyle = 'rgba(0, 0, 0, 0.5)';
-    c.fillRect(0, 0, canvas.width, canvas.height);
+    console.log(maps[player.mapindex].image.width)
+    if (verificationmap(currentMap)){
+        if (player.mapindex == 6){
+            player.mapindex = 0
+        }else {
+            player.mapindex += 1;
+        }
+        changingmap = true
+    }
 
-    c.fillStyle = 'white';
-    c.font = '24px Arial';
-    c.textAlign = 'center';
-    c.fillText('Choisissez une classe :', canvas.width / 2, canvas.height / 2 - 50);
+    if (changingmap) {
+        currentMap,currentfore,changingmap = changemap(changingmap)
+    }
 
-    c.fillStyle = 'blue';
-    c.fillRect(canvas.width / 4-5, canvas.height / 2, 160, 50);
-    c.fillStyle = 'white';
-    c.fillText('Classe Melee', canvas.width / 4 + 75, canvas.height / 2 + 30);
+    currentMap.boundaries.forEach(boundary =>{
+       // boundary.draw()
+    })
 
-    c.fillStyle = 'red';
-    c.fillRect(canvas.width / 4 * 3 - 165, canvas.height / 2, 180, 50);
-    c.fillStyle = 'white';
-    c.fillText('Classe Shooter', canvas.width / 4 * 3 - 75, canvas.height / 2 + 30);
+    playerMove(currentMap,currentfore);
+    
+    drawMutants(player.mapindex);
+    // drawNpc(player.mapindex);
+
+    player.update();
+    player.minimap(currentMap)
+    currentfore.draw()
 }
 
 function chooseClass(className) {
@@ -73,13 +104,7 @@ function chooseClass(className) {
     Game();
 }
 
-function Game() {
-    c.drawImage(map,0,0);
-    drawMutants(player.mapindex);
-    drawNpc(player.mapindex);
-    player.update();
-    playerMove();
-}
+animate();
 
 canvas.addEventListener('click', function(event) {
     if (player.mapindex == -1) {
@@ -95,7 +120,16 @@ canvas.addEventListener('click', function(event) {
             mouseY >= canvas.height / 2 && mouseY <= canvas.height / 2 + 50) {
             chooseClass('shooter');
         }
-    }
+    } else if (player.mapindex == 7) {
+        const mouseX = event.clientX - canvas.getBoundingClientRect().left;
+        const mouseY = event.clientY - canvas.getBoundingClientRect().top;
+
+        if (mouseX >= canvas.width / 2 - 90 && mouseX <= canvas.width / 2 + 90 &&
+        mouseY >= canvas.height / 2 && mouseY <= canvas.height / 2 + 60) {
+            location.reload();
+            animate();
+        } 
+    } 
 });
 
 window.addEventListener('keydown', (event) => {
@@ -116,9 +150,26 @@ window.addEventListener('keydown', (event) => {
             keys.s.pressed = true;
             break;
 
-        case 'Shift':
-            keys.shift.pressed = true;
+        case 'g':
+            if (Date.now() - lastGKeyPressTime > 500) { // 500 millisecondes de cooldown
+                console.log(player.mapindex)
+                console.log(currentMap.position.x,currentMap.position.y)
+                lastGKeyPressTime = Date.now();
+            }
             break;
+
+        case 'j':
+            if (Date.now() - lastJKeyPressTime > 500) { // 500 millisecondes de cooldown
+                if (player.mapindex == 6){
+                    player.mapindex = 0
+                }else {
+                    player.mapindex += 1;
+                }
+                changingmap = true
+                lastJKeyPressTime = Date.now();
+            }
+            break;
+
     }
 });
 
@@ -139,9 +190,15 @@ window.addEventListener('keyup', (event) => {
         case 's':
             keys.s.pressed = false;
             break;
-
-        case 'Shift':
-            keys.shift.pressed = false;
+        
+        case 'j':
+            changemapkey = false;
             break;
+
+        case 'g':
+            printposkey = false;
+            break;
+    
+
     }
 });

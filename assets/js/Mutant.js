@@ -1,19 +1,23 @@
+const MutantImage =  new Image()
+MutantImage.src = 'assets/img/mutant/mutant.png'
+
 class Mutant {
     constructor(position) {
         this.position = position;
         this.width = Math.random() * (30 - 20) + 20;
         this.height = Math.random() * (35 - 20) + 20;
         this.color = 'red';
-        this.shadowColor = 'rgba(0, 0, 0, 0.3)'; // Couleur de l'ombre
-        this.shadowRadius = 14; // Rayon de l'ombre
+        this.shadowColor = 'rgba(0, 0, 0, 0.3)'; 
+        this.shadowRadius = 14;
+        this.image = MutantImage;
+        this.imageWidth = 10000;
+        this.imageHeight = 10000;
 
         const size = this.width * this.height;
 
-        this.speed = Math.min(1.30, 0.75 + (1.30 - 0.75) * (1 - ((this.width / 2) * (this.height * 2)) / 1225));
+        this.speed = Math.min(3.0, 1.50 + (3.0 - 1.50) * (1 - ((this.width / 2) * (this.height * 2)) / 1225));
 
         this.maxHealth = Math.round(25 * size / 1225);
-
-
         this.health = this.maxHealth;
 
         this.damage = Math.round(15 * size / 1225);
@@ -22,18 +26,12 @@ class Mutant {
     }
 
     draw() {
-        c.save();
-        c.beginPath();
-        c.arc(this.position.x, this.position.y - 5 + this.height / 2, this.width / 2, 0, Math.PI * 2);
-        c.fillStyle = this.shadowColor;
-        c.fill();
-        c.restore();
+        c.drawImage(
+            this.image,
+            this.position.x - this.width / 2,
+            this.position.y - this.height / 2,
+        );
 
-        c.fillStyle = this.color;
-        c.fillRect(this.position.x - this.width / 2, this.position.y - this.height / 2, this.width, this.height);
-
-        c.strokeStyle = 'black';
-        c.strokeRect(this.position.x - this.width / 2, this.position.y - this.height / 2, this.width, this.height);
     }
 
     drawHealthBar() {
@@ -76,7 +74,7 @@ class Mutant {
     
         const distanceToPlayer = Math.sqrt(dx * dx + dy * dy);
     
-        if (distanceToPlayer > 0 && distanceToPlayer<400) {
+        if (distanceToPlayer > 0) {
             const vx = (dx / distanceToPlayer) * this.speed;
             const vy = (dy / distanceToPlayer) * this.speed;
     
@@ -113,8 +111,8 @@ class Mutant {
 
 function drawMutants(mapIndex) {
     if (mapIndex >= 0 && mapIndex < mutants.length) {
-        const mutantSet = mutants[mapIndex];
-        mutantSet.forEach(mutant => {
+
+        mutants.forEach(mutant => {
             mutant.update();
         });
     } else {
@@ -122,9 +120,14 @@ function drawMutants(mapIndex) {
     }
 }
 
-const mutants = [
-    [new Mutant({ x: 100, y: 100 }),
-    new Mutant({ x: 200, y: 300 })],
-    [new Mutant({ x: 100, y: 100 }),
-    new Mutant({ x: 200, y: 300 })]
-]
+
+const mutants = []
+
+const mutant1 = new Mutant({ x: 200, y: 100 })
+const mutant2 = new Mutant({ x: 200, y: 300 })
+
+mutants.push(mutant1)
+mutants.push(mutant2)
+
+
+

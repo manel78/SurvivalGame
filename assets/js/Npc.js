@@ -33,5 +33,18 @@ function drawNpc(mapIndex) {
 }
 
 const npc = [
-    [new Npc({ x: canvas.width*0.8, y: canvas.height/2 })]
+    [new Npc({ x: canvas.width*0.8, y: canvas.height/2 })],
+    
+    [new Npc({ x: canvas.width*0.8, y: canvas.height/2 })],
+    
+    [new Npc({ x: canvas.width*0.8, y: canvas.height/2 })],
+    
+    [new Npc({ x: canvas.width*0.8, y: canvas.height/2 })],
+    
+    [new Npc({ x: canvas.width*0.8, y: canvas.height/2 })],
+    
+    [new Npc({ x: canvas.width*0.8, y: canvas.height/2 })],
+    
+    [new Npc({ x: canvas.width*0.8, y: canvas.height/2 })],
+    
 ];
