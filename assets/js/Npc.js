@@ -1,4 +1,4 @@
-class Npc {
+/*class Npc {
     constructor(position) {
         this.position = position;
         this.width = 25;
@@ -47,4 +47,4 @@ const npc = [
     
     [new Npc({ x: canvas.width*0.8, y: canvas.height/2 })],
     
-];
+];*/

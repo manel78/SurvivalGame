@@ -12,10 +12,11 @@ class Mutant {
         this.image = MutantImage;
         this.imageWidth = 10000;
         this.imageHeight = 10000;
-
+        this.distanceToPlayer;
+0
         const size = this.width * this.height;
 
-        this.speed = Math.min(3.0, 1.50 + (3.0 - 1.50) * (1 - ((this.width / 2) * (this.height * 2)) / 1225));
+        this.speed = Math.min(0.40+speedmutant, 0.20+speedmutant/2 + (0.40+speedmutant - 0.20+speedmutant/2) * (1 - ((this.width / 2) * (this.height * 2)) / 1225));
 
         this.maxHealth = Math.round(25 * size / 1225);
         this.health = this.maxHealth;
@@ -33,7 +34,14 @@ class Mutant {
         );
 
     }
-
+    takeDamage(damage) {
+        if ((this.health-damage)<0) {
+            this.health = 0;
+            //this.delete();
+        } else {
+            this.health -= damage;
+        }
+    }
     drawHealthBar() {
         const barWidth = 100;
         const barHeight = 5;
@@ -73,6 +81,7 @@ class Mutant {
         const dy = playerFootPositionY - this.position.y - this.height/2;
     
         const distanceToPlayer = Math.sqrt(dx * dx + dy * dy);
+        this.distanceToPlayer = distanceToPlayer;
     
         if (distanceToPlayer > 0) {
             const vx = (dx / distanceToPlayer) * this.speed;
@@ -120,14 +129,41 @@ function drawMutants(mapIndex) {
     }
 }
 
+// Fonction pour générer des positions aléatoires sur la carte
+function generateRandomPosition() {
+    const minX = -500;
+    const maxX = 500;
+    const minY = -500;
+    const maxY = 500;
 
-const mutants = []
+    const randomX = Math.random() * (maxX - minX) + minX;
+    const randomY = Math.random() * (maxY - minY) + minY;
+
+    return { x: randomX, y: randomY };
+}
+
+// Fonction pour créer et ajouter trois nouveaux mutants
+function createMutants() {
+    for (let i = 0; i < 3; i++) {
+        const randomPosition = generateRandomPosition();
+        const newMutant = new Mutant(randomPosition);
+        mutants.push(newMutant);
+    }
+}
+
+// Appeler la fonction createMutants toutes les quatre secondes
+setInterval(createMutants, 4000);
+
+
+let mutants = []
 
 const mutant1 = new Mutant({ x: 200, y: 100 })
 const mutant2 = new Mutant({ x: 200, y: 300 })
 
 mutants.push(mutant1)
 mutants.push(mutant2)
+
+
 
 
 

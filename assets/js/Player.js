@@ -10,6 +10,9 @@ playerLeftImage.src = 'assets/img/player/playerLeft.png'
 const playerRightImage = new Image()
 playerRightImage.src = 'assets/img/player/playerRight.png'
 
+const sword = new Image()
+sword.src = 'assets/img/player/weapon.png'
+
 class Player {
     constructor(position, frames, animate = false) {
         this.mapindex = -1;
@@ -72,20 +75,20 @@ class Player {
     setStats(className){
         this.classes = className;
         if (this.classes == "shooter") {
-            this.maxHealth = 2;
+            this.maxHealth = 100;
             this.health = this.maxHealth;
             this.maxStamina = 100;
             this.stamina = this.maxStamina;
-            this.weapon = new Weapon;
+            this.weapon = new Weapon();
 
             this.velocity = 3.4;
 
         } else if (this.classes == "melee") {
-            this.maxHealth = 250;
+            this.maxHealth = 100;
             this.health = this.maxHealth;
             this.maxStamina = 150;
             this.stamina = this.maxStamina;
-            this.weapon = new Weapon;
+            this.weapon = new Weapon(10, 1, 1, sword);
 
             this.velocity = 3.20;
         }
@@ -147,7 +150,7 @@ class Player {
     }
 
     update() {
-        // this.minimap();
+        //this.minimap();
         this.drawHealthBar();
         this.drawStaminaBar();
         this.draw();

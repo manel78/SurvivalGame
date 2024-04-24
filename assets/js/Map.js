@@ -54,7 +54,6 @@ class Map {
       c.drawImage(this.image, this.position.x, this.position.y)
   }
 }
-
 class Boundary {
   static width = 48
   static height = 48
@@ -71,8 +70,8 @@ class Boundary {
 }
 
 const offset = {
-  x: window.innerWidth - (window.innerWidth / 4),
-  y:   window.innerHeight - (window.innerHeight / 8)
+  x: window.innerWidth - (window.innerWidth / 2),
+  y:   window.innerHeight - (window.innerHeight / 2)
 }
 
 const maps = [
@@ -138,8 +137,7 @@ function rectangleCollision({ rectangle1, rectangle2 }) {
 
 function playerMove(map,foreground) {
     const diagonalVelocity = player.velocity / Math.sqrt(2);
-    const movables = [map, ...map.boundaries,foreground, mutants[0],mutants[1]]
-    
+    const movables = [map, ...map.boundaries,foreground]
     let moving = true
     player.animate = false
 
