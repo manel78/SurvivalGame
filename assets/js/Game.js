@@ -3,20 +3,14 @@ const c = canvas.getContext('2d');
 let f = 1;
 c.fillStyle = 'rgba(0,0,0)';
 
+// Global Variables
 canvas.width = window.innerWidth - (window.innerWidth / 4);
 canvas.height = window.innerHeight - (window.innerHeight / 8);
 
-const scaledCanvas = {
-    width: canvas.width / 1,
-    height: canvas.height / 1,
-};
-
 const sworddance = new Weapon(8, 100, 500, sword);
-
 let selectedClass = '';
 let changemapkey = false;
 let printposkey = false;
-
 const player = new Player({
     x: canvas.width/2,
     y: canvas.height / 2
@@ -43,38 +37,42 @@ const keys = {
         pressed: false,
     },
 };
+
+// Main Function
 function animate() {
     window.requestAnimationFrame(animate);
     c.clearRect(0, 0, canvas.width, canvas.height);
 
-    if (player.health == 0){ // Verif Mort
+    if (player.health == 0){ // Death verification
         player.mapindex = 7
     } 
     
     if (player.mapindex == -1) {
         drawClassMenu();
-    } else if (player.mapindex > -1 && player.mapindex <= 6) { 
+    } else if (player.mapindex > -1 && player.mapindex <= 6) {  // 6 Max
         if (keys.a.pressed && f > 0) {
             sworddance.attack();
             keys.a.pressed = false;
             f--;
-            // Réinitialiser la touche "a" après un délai de 4 secondes
+            // Reset the "a" key after 4s
             setTimeout(() => {
                 f++;
-            }, 2500);// Appel de la méthode d'attaque de l'arme
-        }// 6 Max
+            }, 2500); 
+        }
         Game();
     } else if (player.mapindex == 7) {
         drawDeathMenu();
     } 
     
 }
-
+// Game Function
 function Game() {
+    // Game Variable
     currentMap = maps[player.mapindex];
     currentfore = foreground[player.mapindex];
     currentMap.draw();
 
+    // Changing Map Verification
     if (verificationmap(currentMap)){
         if (player.mapindex == 6){
             player.mapindex = 0
@@ -83,19 +81,23 @@ function Game() {
         }
         changingmap = true
     }
-
     if (changingmap) {
         currentMap,currentfore,changingmap = changemap(changingmap)
     }
 
+    // Draw Boundaries 
     // currentMap.boundaries.forEach(boundary =>{
        // boundary.draw()
     // })
 
     playerMove(currentMap,currentfore);
     drawMutants(player.mapindex);
+
     // drawNpc(player.mapindex);
+
     mutants = mutants.filter(deadmutant => deadmutant.health > 0)
+
+    // player + foreground update
     player.update();
     player.minimap(currentMap)
     currentfore.draw()
@@ -110,6 +112,7 @@ function chooseClass(className) {
 
 animate();
 
+// get click position 
 canvas.addEventListener('click', function(event) {
     if (player.mapindex == -1) {
         const mouseX = event.clientX - canvas.getBoundingClientRect().left;
@@ -136,6 +139,7 @@ canvas.addEventListener('click', function(event) {
     } 
 });
 
+// key variable
 window.addEventListener('keydown', (event) => {
     switch (event.key) {
         case 'a': 

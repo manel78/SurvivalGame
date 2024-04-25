@@ -56,15 +56,15 @@ class Mutant {
     }
 
     touchPlayer() {
-        // Coins du joueur
+        // Player corners
         let playerTopLeft = { x: player.position.x - player.width / 2, y: player.position.y - player.height / 2 };
         let playerBotRight = { x: player.position.x + player.width / 2, y: player.position.y + player.height / 2 };
     
-        // Coins de cet objet
+        // Object corners
         let thisTopLeft = { x: this.position.x - this.width / 2, y: this.position.y - this.height / 2 };
         let thisBotRight = { x: this.position.x + this.width / 2, y: this.position.y + this.height / 2 };
     
-        // Vérification de collision
+        // Collision check
         if (
             (thisTopLeft.x <= playerBotRight.x && thisTopLeft.y <= playerBotRight.y) &&
             (thisBotRight.x >= playerTopLeft.x && thisBotRight.y >= playerTopLeft.y)
@@ -97,7 +97,7 @@ class Mutant {
         const currentTime = Date.now();
         const timeSinceLastAttack = currentTime - this.lastAttackTime;
     
-        // Vérifier si le cooldown est écoulé
+        // Check if cooldown is over
         if (timeSinceLastAttack >= this.attackCooldown) {
             const distanceToPlayer = Math.sqrt(
                 Math.pow(player.position.x - this.position.x, 2) +
@@ -125,7 +125,7 @@ function drawMutants(mapIndex) {
     });
 }
 
-// Fonction pour générer des positions aléatoires sur la carte
+// Function to generate random positions on the map
 function generateRandomPosition() {
     const minX = -500;
     const maxX = 500;
@@ -138,7 +138,7 @@ function generateRandomPosition() {
     return { x: randomX, y: randomY };
 }
 
-// Fonction pour créer et ajouter trois nouveaux mutants
+// Function to create and add three new mutants
 function createMutants() {
     for (let i = 0; i < 3; i++) {
         const randomPosition = generateRandomPosition();
@@ -147,8 +147,8 @@ function createMutants() {
     }
 }
 
-// Appeler la fonction createMutants toutes les quatre secondes
-setInterval(createMutants, 4000);
+// Create mutants every 3s
+setInterval(createMutants, 3000);
 
 
 let mutants = []

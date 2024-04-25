@@ -1,3 +1,4 @@
+// Load Player Image
 const playerDownImage = new Image()
 playerDownImage.src = 'assets/img/player/playerDown.png'
 

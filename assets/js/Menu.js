@@ -1,4 +1,4 @@
-
+// Class Menu
 function drawClassMenu() {
     c.fillStyle = 'rgba(0, 0, 0, 0.5)';
     c.fillRect(0, 0, canvas.width, canvas.height);
@@ -19,6 +19,7 @@ function drawClassMenu() {
     c.fillText('Classe Shooter', canvas.width / 4 * 3 - 75, canvas.height / 2 + 30);
 }
 
+// Death Menu
 function drawDeathMenu(){
     c.fillStyle = 'rgba(165,38,10)';
     c.fillRect(0, 0, canvas.width, canvas.height);
